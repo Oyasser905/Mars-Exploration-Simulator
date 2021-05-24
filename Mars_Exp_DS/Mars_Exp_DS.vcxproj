@@ -139,12 +139,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Event.h" />
+    <ClInclude Include="FormulationEvent.h" />
+    <ClInclude Include="Mission.h" />
     <ClInclude Include="priorityQueue.h" />
     <ClInclude Include="Queue.h" />
+    <ClInclude Include="Rover.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Event.cpp" />
     <ClCompile Include="FormulationEvent.cpp" />
     <ClCompile Include="MarsStation.cpp" />
+    <ClCompile Include="Mission.cpp" />
+    <ClCompile Include="Rover.cpp" />
     <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

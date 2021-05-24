@@ -1,7 +1,8 @@
 #include<iostream>
+#include "FormulationEvent.h"
 using namespace std;
 
-//void func()
-//{
-//	return;
-//}
+void FormulationEvent::Execute()
+{
+	return;
+}
