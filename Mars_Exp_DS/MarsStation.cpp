@@ -15,3 +15,8 @@ void checkDroneRovers()
 {
 	return;
 }
+
+int main()
+{
+
+}

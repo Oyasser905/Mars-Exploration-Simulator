@@ -1,5 +1,4 @@
 #pragma once
-//Priority Queue using Linked List
 #include<iostream>
 using namespace std;
 
@@ -8,27 +7,31 @@ template < typename T>
 class Node
 {
 private:
-	T item; // A data item
-	int priority; // Higher values indicate higher priority
-	Node<T>* next; // Pointer to next node
+	T item; //data item
+	int priority; //higher values indicate higher priority
+	Node<T>* next; //pointer to next node
 public:
-	Node();
-	Node(const T& r_Item, int pr);
-	Node(const T& r_Item, Node<T>* nextNodePtr, int pr);
-	Node<T>* newNode(const T& r_Item, int pr);
-	void setItem(const T& r_Item);
-	void setNext(Node<T>* nextNodePtr);
-	T getItem() const;
-	int getPriority() const;
-	Node<T>* getNext() const;
+	Node(); //constructor; no input
+	Node(const T& r_Item, int pr); //constructor; input(item, priority)
+	Node(const T& r_Item, int pr, Node<T>* nextNodePtr); //constructor; input(item, priority, next)
+	void newNode(const T& r_Item, int pr); //create a new node
+	void newNode(const T& r_Item, int pr, Node<T>* nextNodePtr); //create a new node with next pointer
+	void setItem(const T& r_Item); //set item data
+	void setPriority(int pr); //set item data
+	void setNext(Node<T>* nextNodePtr); //set next of the node
+	T getItem() const; //get the item data of node
+	int getPriority() const; //get priority data of node
+	Node<T>* getNext() const; //get next of node
 };
 
-//Implementation of Node class functions
+//----------Implementation of Node class functions----------
+//constructor
 template < typename T>
 Node<T>::Node()
 {
 	next = nullptr;
 }
+//constructor with item and priority 
 template < typename T>
 Node<T>::Node(const T& r_Item, int pr)
 {
@@ -36,56 +39,69 @@ Node<T>::Node(const T& r_Item, int pr)
 	priority = pr;
 	next = nullptr;
 }
-
+//constructor with item, priority, and next
 template < typename T>
-Node<T>::Node(const T& r_Item, Node<T>* nextNodePtr, int pr)
+Node<T>::Node(const T& r_Item, int pr, Node<T>* nextNodePtr)
 {
 	item = r_Item;
 	priority = pr;
 	next = nextNodePtr;
 }
 
-// Function to create a new node
+//Function to create a new node without the next
 template < typename T>
-Node<T>* Node<T>::newNode(const T& r_Item, int pr)
+void Node<T>::newNode(const T& r_Item, int pr)
 {
 	Node* nNode = new Node<T>*(r_Item, pr);
-	nNode->item = r_Item;
-	nNode->priority = pr;
-	nNode->next = NULL;
-
-	return temp;
+	nNode->setNext(NULL);
 }
 
-// Function to set item or data of Node
+//Function to Create new node with the next 
+template<typename T>
+void Node<T>::newNode(const T& r_Item, int pr, Node<T>* nextNodePtr)
+{
+	Node* nNode = new Node<T>*(r_Item);
+	nNode->setItem(r_Item);
+	nNode->getPriority(pr);
+	nNode->setNext(nextNodePtr);
+}
+
+//Function to set priority
+template<typename T>
+void Node<T>::setPriority(int pr)
+{
+	priority = pr;
+}
+
+//Function to set item data of Node
 template < typename T>
 void Node<T>::setItem(const T& r_Item)
 {
 	item = r_Item;
 }
 
-// Set next function
+//Set next function
 template < typename T>
 void Node<T>::setNext(Node<T>* nextNodePtr)
 {
 	next = nextNodePtr;
 }
 
-// Get Item function
+//Get Item function
 template < typename T>
 T Node<T>::getItem() const
 {
 	return item;
 }
 
-// Get Priority number function
+//Get Priority function
 template < typename T>
 int Node<T>::getPriority() const
 {
 	return priority;
 }
 
-// Get next function
+//Get next function
 template < typename T>
 Node<T>* Node<T>::getNext() const
 {
@@ -97,22 +113,22 @@ template <typename T>
 class PriorityQueue
 {
 private:
-	Node<T>* backPtr;
-	Node<T>* frontPtr;
+	Node<T>* backPtr; //back pointer
+	Node<T>* frontPtr; //front pointer
+	int size; //size of the queue
 public:
-	PriorityQueue();
-	bool isEmpty() const;
-	bool enqueue(const T& newEntry, int pr);
-	bool dequeue(T& frntEntry);
-	bool peek(T& frntEntry)  const;
-	void print() const;
-	~PriorityQueue();
-
-	//copy constructor
-	PriorityQueue(const PriorityQueue<T>& PQ);
+	PriorityQueue(); //constructor
+	bool isEmpty() const; //check is queue is empty
+	bool enqueue(const T& newEntry, int pr); //enqueue queue; returns true if enqueued
+	bool dequeue(T& frntEntry); //dequeue queue; returns true if dequeued
+	int getSize() const; //get size of queue
+	bool peek(T& frntEntry)  const; //gets item of the frontptr; returns true if it's not empty
+	void print() const; //prints queue
+	PriorityQueue(const PriorityQueue<T>& PQ);//copy constructor
+	~PriorityQueue(); //destructor
 };
 
-
+//----------Implementation of Priority Queue class functions----------
 //The constructor of the Priority Queue class.
 template <typename T>
 PriorityQueue<T>::PriorityQueue()
@@ -120,25 +136,15 @@ PriorityQueue<T>::PriorityQueue()
 	backPtr = nullptr;
 	frontPtr = nullptr;
 }
-/*
-Function: isEmpty
-Sees whether this priority queue is empty.
 
-Input: None.
-Output: True if the priority queue is empty; otherwise false.
-*/
+//isEmpty; Sees whether this priority queue is empty.
 template <typename T>
 bool PriorityQueue<T>::isEmpty() const
 {
 	return (frontPtr == nullptr);
 }
 
-/*Function:enqueue
-Adds newEntry at the back of this priority queue.
-
-Input: newEntry .
-Output: True if the operation is successful; otherwise false.
-*/
+//Enqueue; Adds newEntry at the back of this priority queue.
 template <typename T>
 bool PriorityQueue<T>::enqueue(const T& newEntry, int pr)
 {
@@ -166,16 +172,11 @@ bool PriorityQueue<T>::enqueue(const T& newEntry, int pr)
 			current = current->getNext();
 		}
 	}
+	size++;
 	return true;
 } 
 
-/*Function: dequeue
-Removes the front of this queue. That is, removes the item that was added
-earliest.
-
-Input: None.
-Output: True if the operation is successful; otherwise false.
-*/
+//Dequeue; Removes the front of this queue. That is, removes the item that was added earliest.
 template <typename T>
 bool PriorityQueue<T>::dequeue(T& frntEntry)
 {
@@ -195,10 +196,17 @@ bool PriorityQueue<T>::dequeue(T& frntEntry)
 
 	// Free memory reserved for the dequeued node
 	delete nodeToDeletePtr;
+	size--;
 	return true;
 }
 
-// Return the value at head
+template<typename T>
+int PriorityQueue<T>::getSize() const
+{
+	return size;
+}
+
+// Peek; gets item of the front item; returns true if it's not empty
 template <typename T>
 bool PriorityQueue<T>::peek(T& frntEntry) const
 {
@@ -210,27 +218,30 @@ bool PriorityQueue<T>::peek(T& frntEntry) const
 	return true;
 }
 
-/*
-Function: destructor
-removes all nodes from the priority queue by dequeuing them
-*/
+//Destructor removes all nodes from the priority queue by dequeuing them
 template <typename T>
 PriorityQueue<T>::~PriorityQueue()
 {
 	T temp;
 
-	//Free (Dequeue) all nodes in the priority queue
-	while (dequeue(temp));
+	
+	while (dequeue(temp))//Dequeue all nodes in the priority queue
 }
 
-/*
-Function: Copy constructor
-To avoid shallow copy,
-copy constructor is provided
+//Print function; prints all of the queue
+template<typename T>
+void PriorityQueue<T>::print() const
+{
+	Node<T>* ptr = frontPtr;
+	while (ptr)
+	{
+		cout << ptr->getItem() << " ";
+		ptr = ptr->getNext();
+	}
+	cout << endl;
+}
 
-Input: PriorityQueue<T>: The Priority Queue to be copied
-Output: none
-*/
+//Copy constructor
 template <typename T>
 PriorityQueue<T>::PriorityQueue(const PriorityQueue<T>& PQ)
 {
@@ -254,16 +265,4 @@ PriorityQueue<T>::PriorityQueue(const PriorityQueue<T>& PQ)
 		backPtr = ptr;
 		NodePtr = NodePtr->getNext();
 	}
-}
-
-template<typename T>
-void PriorityQueue<T>::print() const
-{
-	Node<T>* ptr = frontPtr;
-	while (ptr)
-	{
-		cout << ptr->getItem() << " ";
-		ptr = ptr->getNext();
-	}
-	cout << endl;
 }
