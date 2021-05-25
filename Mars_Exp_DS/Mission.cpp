@@ -1,5 +1,14 @@
 #include "Mission.h"
 
+Mission::Mission()
+{
+}
+
+Mission::Mission(char t, int d, int id, int tloc, int dur, int sig)
+{
+	type = t; day = d; ID = id; targetLocation = tloc; duration = dur; significance = sig;
+}
+
 void Mission::setID(int id)
 {
 	ID = id;

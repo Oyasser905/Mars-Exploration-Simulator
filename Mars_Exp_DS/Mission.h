@@ -13,6 +13,9 @@ private:
 	int significance;
 	int status;
 public:
+	//constructors
+	Mission();
+	Mission(char t, int d, int id, int tloc, int dur, int sig);
 	//setters
 	void setID(int id);
 	void setDay(int d);
