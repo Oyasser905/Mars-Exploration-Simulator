@@ -72,7 +72,7 @@ int Mission::getStatus()
 
 int Mission::calcWeight()
 {
-	int weight;
+	int weight = 0;
 	if (type == 'E')
 	{
 		weight = significance + targetLocation + duration;

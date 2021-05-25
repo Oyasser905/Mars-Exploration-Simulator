@@ -5,17 +5,17 @@ using namespace std;
 class Rover
 {
 private:
-	char type;
+	char R_type;
 	int speed;
 	int checkupDuration;
 public:
 	//setters
-	void setType();
-	void setSpeed();
-	void setCheckupDuration();
+	void setType(char t);
+	void setSpeed(int s);
+	void setCheckupDuration(int ch);
 
 	//getters
-	void getType();
-	void getSpeed();
-	void getCheckupDuration();
+	char getType();
+	int getSpeed();
+	int getCheckupDuration();
 };
