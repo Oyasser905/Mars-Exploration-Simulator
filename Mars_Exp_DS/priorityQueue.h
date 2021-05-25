@@ -120,6 +120,7 @@ public:
 	PriorityQueue(); //constructor
 	bool isEmpty() const; //check is queue is empty
 	bool enqueue(const T& newEntry, int pr); //enqueue queue; returns true if enqueued
+	bool sort_asc_enqueue(const T& newEntry, int pr); //sort ascendingly enqueue queue function; returns true if enqueued
 	bool dequeue(T& frntEntry); //dequeue queue; returns true if dequeued
 	int getSize() const; //get size of queue
 	bool peek(T& frntEntry)  const; //gets item of the frontptr; returns true if it's not empty
@@ -174,7 +175,38 @@ bool PriorityQueue<T>::enqueue(const T& newEntry, int pr)
 	}
 	size++;
 	return true;
-} 
+}
+template<typename T>
+bool PriorityQueue<T>::sort_asc_enqueue(const T& newEntry, int pr)
+{
+	Node<T>* newNodePtr = newNode(newEntry, pr);
+	// Insert the new node
+	if (isEmpty()) //special case if this is the first node to insert
+	{
+		frontPtr = newNodePtr; // The queue is empty
+	}
+	if (newNodePtr->getPriority() < frontPtr->getPriority())
+	{
+		newNodePtr->setNext(frontPtr);
+		frontPtr = newNodePtr;
+	}
+	else
+	{
+		Node<T>* current;
+		while (current)
+		{
+			if (newNodePtr->getPriority() <= current->getPriority())
+			{
+				newNodePtr->setNext() = current->getNext();
+				current->setNext() = newNodePtr;
+			}
+			current = current->getNext();
+		}
+	}
+	size++;
+	return true;
+}
+
 
 //Dequeue; Removes the front of this queue. That is, removes the item that was added earliest.
 template <typename T>
