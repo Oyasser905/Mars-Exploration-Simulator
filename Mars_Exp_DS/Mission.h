@@ -14,13 +14,13 @@ private:
 	int status;
 public:
 	//setters
-	void setID();
-	void setDay();
-	void setType();
-	void setTargetLocation();
-	void setDuration();
-	void setSignificance();
-	void setStatus();
+	void setID(int id);
+	void setDay(int d);
+	void setType(char t);
+	void setTargetLocation(int tloc);
+	void setDuration(int dur);
+	void setSignificance(int sig);
+	void setStatus(int s);
 
 	//getters
 	int getID();
@@ -32,5 +32,5 @@ public:
 	int getStatus();
 
 	//member functions
-	int calcSignificance();
+	int calcWeight();
 };
