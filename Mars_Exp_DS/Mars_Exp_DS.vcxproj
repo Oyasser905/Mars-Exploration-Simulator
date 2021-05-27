@@ -142,10 +142,12 @@
     <ClInclude Include="Event.h" />
     <ClInclude Include="FormulationEvent.h" />
     <ClInclude Include="LinkedList.h" />
+    <ClInclude Include="MarsStation.h" />
     <ClInclude Include="Mission.h" />
     <ClInclude Include="priorityQueue.h" />
     <ClInclude Include="Queue.h" />
     <ClInclude Include="Rover.h" />
+    <ClInclude Include="UI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Event.cpp" />

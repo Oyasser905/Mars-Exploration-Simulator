@@ -79,6 +79,11 @@ int Mission::getStatus()
 	return status;
 }
 
+int Mission::getWeight()
+{
+	return weight;
+}
+
 int Mission::calcWeight()
 {
 	int weight = 0;

@@ -4,9 +4,9 @@ Rover::Rover()
 {
 }
 
-Rover::Rover(char t, int sp, int ch, char st)
+Rover::Rover(char t, int sp, int ch, int n)
 {
-	R_type = t; speed = sp; checkupDuration = ch; R_status = st;
+	R_type = t; speed = sp; checkupDuration = ch, no_check = n;
 }
 
 void Rover::setType(char t)
@@ -29,6 +29,11 @@ void Rover::setStatus(char s)
 	R_status = s;
 }
 
+void Rover::setNo_Check(int n)
+{
+	no_check = n;
+}
+
 char Rover::getType()
 {
 	return R_type;
@@ -47,4 +52,9 @@ int Rover::getCheckupDuration()
 char Rover::getStatus()
 {
 	return R_status;
+}
+
+int Rover::getNo_Check()
+{
+	return no_check;
 }

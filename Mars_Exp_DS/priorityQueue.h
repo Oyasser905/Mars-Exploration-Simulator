@@ -149,7 +149,7 @@ bool PriorityQueue<T>::isEmpty() const
 template <typename T>
 bool PriorityQueue<T>::enqueue(const T& newEntry, int pr)
 {
-	Node<T>* newNodePtr = newNode(newEntry, pr);
+	Node<T>* newNodePtr = new Node<T>(newEntry, pr);
 	// Insert the new node
 	if (isEmpty()) //special case if this is the first node to insert
 	{
@@ -162,13 +162,13 @@ bool PriorityQueue<T>::enqueue(const T& newEntry, int pr)
 	}
 	else
 	{
-		Node<T> *current;
+		Node<T> *current = frontPtr;
 		while (current)
 		{
 			if (newNodePtr->getPriority() >= current->getPriority())
 			{
-				newNodePtr->setNext() = current->getNext();
-				current->setNext() = newNodePtr;
+				newNodePtr->setNext(current->getNext());
+				current->setNext(newNodePtr);
 			}
 			current = current->getNext();
 		}
@@ -179,7 +179,7 @@ bool PriorityQueue<T>::enqueue(const T& newEntry, int pr)
 template<typename T>
 bool PriorityQueue<T>::sort_asc_enqueue(const T& newEntry, int pr)
 {
-	Node<T>* newNodePtr = newNode(newEntry, pr);
+	Node<T>* newNodePtr = new Node<T>(newEntry, pr);
 	// Insert the new node
 	if (isEmpty()) //special case if this is the first node to insert
 	{
@@ -257,7 +257,10 @@ PriorityQueue<T>::~PriorityQueue()
 	T temp;
 
 	
-	while (dequeue(temp))//Dequeue all nodes in the priority queue
+	while (!isEmpty()) //Dequeue all nodes in the priority queue
+	{
+		dequeue(temp);
+	}
 }
 
 //Print function; prints all of the queue

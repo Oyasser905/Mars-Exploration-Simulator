@@ -12,6 +12,7 @@ private:
 	int duration;
 	int significance;
 	int status;
+	int weight;
 public:
 	//constructors
 	Mission();
@@ -33,6 +34,7 @@ public:
 	int getDuration();
 	int getSignificance();
 	int getStatus();
+	int getWeight();
 
 	//member functions
 	int calcWeight();
