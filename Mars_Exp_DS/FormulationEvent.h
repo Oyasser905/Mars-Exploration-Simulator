@@ -1,11 +1,13 @@
 #pragma once
 #include"Event.h"
 #include"Mission.h"
+#include"priorityQueue.h"
 #include<iostream>
 using namespace std;
 
-class FormulationEvent:Event
+class FormulationEvent: public Event
 {
-	void Execute();
-	//Mission* Formulate(char t, int day, int id, int tloc, int dur, int sig);
+public:
+	FormulationEvent();
+	void Execute(char rover_type, int event_day, int ID, int tloc, int mdur, int sig, PriorityQueue<Mission*>* EM, PriorityQueue<Mission*>* PM);
 };
