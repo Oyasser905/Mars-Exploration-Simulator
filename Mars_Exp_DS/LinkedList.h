@@ -4,34 +4,34 @@ using namespace std;
 
 //===============================NODE CLASS================================
 template < typename T>
-class Node
+class NodeLL
 {
 private:
 	T item; //data item
-	Node<T>* next; //pointer to next node
+	NodeLL<T>* next; //pointer to next node
 public:
-	Node(); //constructor; input()
-	Node(const T& r_Item); //constructor; input(item)
-	Node(const T& r_Item, Node<T>* nextNodePtr); //constructor; input(item, next)
+	NodeLL(); //constructor; input()
+	NodeLL(const T& r_Item); //constructor; input(item)
+	NodeLL(const T& r_Item, NodeLL<T>* nextNodePtr); //constructor; input(item, next)
 	void newNode(const T& r_Item); //create a new node
-	void newNode(const T& r_Item, Node<T>* nextNodePtr); //create a new node with next pointer
+	void newNode(const T& r_Item, NodeLL<T>* nextNodePtr); //create a new node with next pointer
 	void setItem(const T& r_Item); //set item data
-	void setNext(Node<T>* nextNodePtr); //set next of the node
+	void setNext(NodeLL<T>* nextNodePtr); //set next of the node
 	T getItem() const; //get the item data of node
-	Node<T>* getNext() const; //get next of node
+	NodeLL<T>* getNext() const; //get next of node
 };
 
 //----------Implementation of Node class functions----------
 //constructor
 template < typename T>
-Node<T>::Node()
+NodeLL<T>::NodeLL()
 {
 	next = nullptr;
 }
 
 //constructor with item
 template < typename T>
-Node<T>::Node(const T& r_Item)
+NodeLL<T>::NodeLL(const T& r_Item)
 {
 	item = r_Item;
 	next = nullptr;
@@ -39,7 +39,7 @@ Node<T>::Node(const T& r_Item)
 
 //constructor with item and next
 template < typename T>
-Node<T>::Node(const T& r_Item, Node<T>* nextNodePtr)
+NodeLL<T>::NodeLL(const T& r_Item, NodeLL<T>* nextNodePtr)
 {
 	item = r_Item;
 	next = nextNodePtr;
@@ -47,7 +47,7 @@ Node<T>::Node(const T& r_Item, Node<T>* nextNodePtr)
 
 //create a new node without next
 template<typename T>
-void Node<T>::newNode(const T& r_Item)
+void NodeLL<T>::newNode(const T& r_Item)
 {
 	Node* nNode = new Node<T> * (r_Item);
 	nNode->setItem(r_Item);
@@ -56,37 +56,37 @@ void Node<T>::newNode(const T& r_Item)
 
 //create a new node with the next
 template<typename T>
-void Node<T>::newNode(const T& r_Item, Node<T>* nextNodePtr)
+void NodeLL<T>::newNode(const T& r_Item, NodeLL<T>* nextNodePtr)
 {
-	Node* nNode = new Node<T> * (r_Item);
+	NodeLL* NodeLL = new NodeLL<T> * (r_Item);
 	nNode->setItem(r_Item);
 	nNode->setNext(nextNodePtr);
 }
 
 //Function to set item
 template < typename T>
-void Node<T>::setItem(const T& r_Item)
+void NodeLL<T>::setItem(const T& r_Item)
 {
 	item = r_Item;
 }
 
 //Function to set next
 template < typename T>
-void Node<T>::setNext(Node<T>* nextNodePtr)
+void NodeLL<T>::setNext(NodeLL<T>* nextNodePtr)
 {
 	next = nextNodePtr;
 }
 
 //Function to get item
 template < typename T>
-T Node<T>::getItem() const
+T NodeLL<T>::getItem() const
 {
 	return item;
 }
 
 //Function to get next
 template < typename T>
-Node<T>* Node<T>::getNext() const
+NodeLL<T>* NodeLL<T>::getNext() const
 {
 	return next;
 }
@@ -97,7 +97,7 @@ template <typename T>
 class LinkedList
 {
 private:
-	Node<T>* Head;
+	NodeLL<T>* Head;
 public:
 	LinkedList()
 	{
@@ -112,7 +112,7 @@ public:
 	//To delete all elements inside the list
 	void DeleteList()
 	{
-		Node<T>* ptr = Head;
+		NodeLL<T>* ptr = Head;
 		while (ptr)
 		{
 			ptr = Head->getNext();
@@ -126,7 +126,7 @@ public:
 	{
 		if (Head)
 		{
-			Node<T>* temp = Head;
+			NodeLL<T>* temp = Head;
 			Head->setNext(Head->getNext());
 			delete temp;
 		}
@@ -139,8 +139,8 @@ public:
 	{
 		if (Head && Head->getNext())
 		{
-			Node<T>* temp = Head;
-			Node<T>* prev = Head->getNext();
+			NodeLL<T>* temp = Head;
+			NodeLL<T>* prev = Head->getNext();
 			while (temp->getNext())
 			{
 				prev = temp;
@@ -151,7 +151,7 @@ public:
 		}
 		else if (Head)
 		{
-			Node<T>* temp = Head;
+			NodeLL<T>* temp = Head;
 			Head = nullptr;
 			delete temp;
 		}
@@ -174,10 +174,10 @@ public:
 	//To insert a new element at the end of the list
 	void InsertEnd(const T& data)
 	{
-		Node<T>* ptr = newNode(data);
+		NodeLL<T>* ptr = newNode(data);
 		if (Head)
 		{
-			Node<T>* ptr2 = Head;
+			NodeLL<T>* ptr2 = Head;
 			while (ptr2->getNext())
 				ptr2 = ptr2->getNext();
 			ptr2->setNext(ptr);
@@ -190,7 +190,7 @@ public:
 
 	void InsertBeg(const T& data)
 	{
-		Node<T>* ptr = new Node<T>(data);
+		NodeLL<T>* ptr = new NodeLL<T>(data);
 		if (Head)
 		{
 			ptr->setNext(Head);
@@ -206,7 +206,7 @@ public:
 	{
 		if (Head)
 		{
-			Node<T>* ptr = Head;
+			NodeLL<T>* ptr = Head;
 			while (ptr)
 			{
 				cout << ptr->getItem() << " ";

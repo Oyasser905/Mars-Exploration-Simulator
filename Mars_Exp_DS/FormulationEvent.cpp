@@ -7,7 +7,7 @@ FormulationEvent::FormulationEvent()
 {
 }
 
-void FormulationEvent::Execute(char rover_type, int event_day, int ID, int tloc, int mdur, int sig, PriorityQueue<Mission*>* EM, PriorityQueue<Mission*>* PM)
+void FormulationEvent::Execute(char rover_type, int event_day, int ID, int tloc, int mdur, int sig, PriorityQueue<Mission*>*& EM, PriorityQueue<Mission*>*& PM)
 {
     if (rover_type == 'E')
     {

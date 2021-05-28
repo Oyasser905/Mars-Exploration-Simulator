@@ -113,9 +113,9 @@ template <typename T>
 class PriorityQueue
 {
 private:
-	Node<T>* backPtr; //back pointer
-	Node<T>* frontPtr; //front pointer
-	int size; //size of the queue
+	Node<T>* backPtr = nullptr; //back pointer
+	Node<T>* frontPtr = nullptr; //front pointer
+	int size = 0; //size of the queue
 public:
 	PriorityQueue(); //constructor
 	bool isEmpty() const; //check is queue is empty
@@ -155,22 +155,22 @@ bool PriorityQueue<T>::enqueue(const T& newEntry, int pr)
 	{
 		frontPtr = newNodePtr; // The queue is empty
 	}
-	if (newNodePtr->getPriority() > frontPtr->getPriority())
-	{
-		newNodePtr->setNext(frontPtr);
-		frontPtr = newNodePtr;
-	}
 	else
 	{
-		Node<T> *current = frontPtr;
-		while (current)
+		if (frontPtr->getPriority() < pr)
 		{
-			if (newNodePtr->getPriority() >= current->getPriority())
+			newNodePtr->setNext(frontPtr);
+			frontPtr = newNodePtr;
+		}
+		else
+		{
+			Node<T>* curr = frontPtr;
+			while ((curr->getNext() != nullptr) && (curr->getNext()->getPriority() > pr))
 			{
-				newNodePtr->setNext(current->getNext());
-				current->setNext(newNodePtr);
+				curr = curr->getNext();
 			}
-			current = current->getNext();
+			newNodePtr->setNext(curr->getNext());
+			curr->setNext(newNodePtr);
 		}
 	}
 	size++;
@@ -185,22 +185,22 @@ bool PriorityQueue<T>::sort_asc_enqueue(const T& newEntry, int pr)
 	{
 		frontPtr = newNodePtr; // The queue is empty
 	}
-	if (newNodePtr->getPriority() < frontPtr->getPriority())
-	{
-		newNodePtr->setNext(frontPtr);
-		frontPtr = newNodePtr;
-	}
 	else
 	{
-		Node<T>* current;
-		while (current)
+		if (frontPtr->getPriority() > pr)
 		{
-			if (newNodePtr->getPriority() <= current->getPriority())
+			newNodePtr->setNext(frontPtr);
+			frontPtr = newNodePtr;
+		}
+		else
+		{
+			Node<T>* curr = frontPtr;
+			while ((curr->getNext() != nullptr) && (curr->getNext()->getPriority() < pr))
 			{
-				newNodePtr->setNext() = current->getNext();
-				current->setNext() = newNodePtr;
+				curr = curr->getNext();
 			}
-			current = current->getNext();
+			newNodePtr->setNext(curr->getNext());
+			curr->setNext(newNodePtr);
 		}
 	}
 	size++;

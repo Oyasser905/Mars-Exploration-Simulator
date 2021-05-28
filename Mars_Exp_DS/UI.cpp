@@ -8,7 +8,6 @@
 #include"Rover.h"
 #include"FormulationEvent.h"
 #include"priorityQueue.h"
-//#include"Queue.h"
 using namespace std;
 
 int num_pr; //No. of polar rovers
@@ -93,11 +92,11 @@ void r_input(string file)
 
                 if (event_type == 'F')
                 {
-                    Event* e = new FormulationEvent();
-                    e->Execute(rover_type, event_day, ID, tloc, mdur, sig, EM, PM);
+                    /*Event* e = new FormulationEvent();
+                    e->Execute(rover_type, event_day, ID, tloc, mdur, sig, EM, PM);*/
                 }
             }
-            for (int i = 0; i < num_er; i++)
+            /*for (int i = 0; i < num_er; i++)
             {
                 Rover* er = new Rover(rover_type, er_sp, er_ch, num_missions);
                 ER->enqueue(er, er_sp);
@@ -106,7 +105,7 @@ void r_input(string file)
             {
                 Rover* pr = new Rover(rover_type, er_sp, er_ch, num_missions);
                 PR->enqueue(pr, pr_sp);
-            }
+            }*/
 
             //Assign_M_to_R(EM, PM, ER, PR, WL);
             cout <<

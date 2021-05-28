@@ -4,34 +4,34 @@ using namespace std;
 
 //===============================NODE CLASS================================
 template < typename T>
-class Node
+class NodeQ
 {
 private:
 	T item; //data item
-	Node<T>* next; //pointer to next node
+	NodeQ<T>* next; //pointer to next node
 public:
-	Node(); //constructor; input()
-	Node(const T& r_Item); //constructor; input(item)
-	Node(const T& r_Item, Node<T>* nextNodePtr); //constructor; input(item, next)
+	NodeQ(); //constructor; input()
+	NodeQ(const T& r_Item); //constructor; input(item)
+	NodeQ(const T& r_Item, NodeQ<T>* nextNodePtr); //constructor; input(item, next)
 	void newNode(const T& r_Item); //create a new node
-	void newNode(const T& r_Item, Node<T>* nextNodePtr); //create a new node with next pointer
+	void newNode(const T& r_Item, NodeQ<T>* nextNodePtr); //create a new node with next pointer
 	void setItem(const T& r_Item); //set item data
-	void setNext(Node<T>* nextNodePtr); //set next of the node
+	void setNext(NodeQ<T>* nextNodePtr); //set next of the node
 	T getItem() const; //get the item data of node
-	Node<T>* getNext() const; //get next of node
+	NodeQ<T>* getNext() const; //get next of node
 }; 
 
 //----------Implementation of Node class functions----------
 //constructor
 template < typename T>
-Node<T>::Node()
+NodeQ<T>::NodeQ()
 {
 	next = nullptr;
 }
 
 //constructor with item
 template < typename T>
-Node<T>::Node(const T& r_Item)
+NodeQ<T>::NodeQ(const T& r_Item)
 {
 	item = r_Item;
 	next = nullptr;
@@ -39,7 +39,7 @@ Node<T>::Node(const T& r_Item)
 
 //constructor with item and next
 template < typename T>
-Node<T>::Node(const T& r_Item, Node<T>* nextNodePtr)
+NodeQ<T>::NodeQ(const T& r_Item, NodeQ<T>* nextNodePtr)
 {
 	item = r_Item;
 	next = nextNodePtr;
@@ -47,46 +47,46 @@ Node<T>::Node(const T& r_Item, Node<T>* nextNodePtr)
 
 //create a new node without next
 template<typename T>
-void Node<T>::newNode(const T& r_Item)
+void NodeQ<T>::newNode(const T& r_Item)
 {
-	Node* nNode = new Node<T>*(r_Item);
+	NodeQ* nNode = new NodeQ<T>*(r_Item);
 	nNode->setItem(r_Item);
 	nNode->setNext(NULL) ;
 }
 
 //create a new node with the next
 template<typename T>
-void Node<T>::newNode(const T& r_Item, Node<T>* nextNodePtr)
+void NodeQ<T>::newNode(const T& r_Item, NodeQ<T>* nextNodePtr)
 {
-	Node* nNode = new Node<T>*(r_Item);
+	Node* nNode = new NodeQ<T>*(r_Item);
 	nNode->setItem(r_Item);
 	nNode->setNext(nextNodePtr);
 }
 
 //Function to set item
 template < typename T>
-void Node<T>::setItem(const T& r_Item)
+void NodeQ<T>::setItem(const T& r_Item)
 {
 	item = r_Item;
 }
 
 //Function to set next
 template < typename T>
-void Node<T>::setNext(Node<T>* nextNodePtr)
+void NodeQ<T>::setNext(NodeQ<T>* nextNodePtr)
 {
 	next = nextNodePtr;
 }
 
 //Function to get item
 template < typename T>
-T Node<T>::getItem() const
+T NodeQ<T>::getItem() const
 {
 	return item;
 }
 
 //Function to get next
 template < typename T>
-Node<T>* Node<T>::getNext() const
+NodeQ<T>* NodeQ<T>::getNext() const
 {
 	return next;
 }
@@ -97,8 +97,8 @@ class LinkedQueue
 {
 private:
 	int size;
-	Node<T>* backPtr;
-	Node<T>* frontPtr;
+	NodeQ<T>* backPtr;
+	NodeQ<T>* frontPtr;
 public:
 	LinkedQueue(); //constructor
 	int getSize() const; //get size of queue
@@ -138,7 +138,7 @@ bool LinkedQueue<T>::isEmpty() const
 template <typename T>
 bool LinkedQueue<T>::enqueue(const T& newEntry)
 {
-	Node<T>* newNodePtr = new Node<T>(newEntry);
+	NodeQ<T>* newNodePtr = new NodeQ<T>(newEntry);
 	// Insert the new node
 	if (isEmpty())	//special case if this is the first node to insert
 		frontPtr = newNodePtr; // The queue is empty
@@ -157,7 +157,7 @@ bool LinkedQueue<T>::dequeue(T& frntEntry)
 	if (isEmpty())
 		return false;
 
-	Node<T>* nodeToDeletePtr = frontPtr;
+	NodeQ<T>* nodeToDeletePtr = frontPtr;
 	frntEntry = frontPtr->getItem();
 	frontPtr = frontPtr->getNext();
 	// Queue is not empty; remove front
@@ -195,7 +195,7 @@ LinkedQueue<T>::~LinkedQueue()
 template <typename T>
 LinkedQueue<T>::LinkedQueue(const LinkedQueue<T>& LQ)
 {
-	Node<T>* NodePtr = LQ.frontPtr;
+	NodeQ<T>* NodePtr = LQ.frontPtr;
 	if (!NodePtr) //LQ is empty
 	{
 		frontPtr = backPtr = nullptr;
@@ -203,14 +203,14 @@ LinkedQueue<T>::LinkedQueue(const LinkedQueue<T>& LQ)
 	}
 
 	//insert the first node
-	Node<T>* ptr = new Node<T>(NodePtr->getItem());
+	NodeQ<T>* ptr = new NodeQ<T>(NodePtr->getItem());
 	frontPtr = backPtr = ptr;
 	NodePtr = NodePtr->getNext();
 
 	//insert remaining nodes
 	while (NodePtr)
 	{
-		Node<T>* ptr = new Node<T>(NodePtr->getItem());
+		NodeQ<T>* ptr = new NodeQ<T>(NodePtr->getItem());
 		backPtr->setNext(ptr);
 		backPtr = ptr;
 		NodePtr = NodePtr->getNext();
@@ -221,7 +221,7 @@ LinkedQueue<T>::LinkedQueue(const LinkedQueue<T>& LQ)
 template<typename T>
 void LinkedQueue<T>::print() const
 {
-	Node<T>* ptr = frontPtr;
+	NodeQ<T>* ptr = frontPtr;
 	while (ptr)
 	{
 		cout << ptr->getItem() << " ";
