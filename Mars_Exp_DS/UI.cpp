@@ -93,11 +93,11 @@ void r_input(string file)
 
                 if (event_type == 'F')
                 {
-                    Event* e = new FormulationEvent();
-                    e->Execute(rover_type, event_day, ID, tloc, mdur, sig, EM, PM);
+                    /*Event* e = new FormulationEvent();
+                    e->Execute(rover_type, event_day, ID, tloc, mdur, sig, EM, PM);*/
                 }
             }
-            for (int i = 0; i < num_er; i++)
+            /*for (int i = 0; i < num_er; i++)
             {
                 Rover* er = new Rover(rover_type, er_sp, er_ch, num_missions);
                 ER->enqueue(er, er_sp);
@@ -106,7 +106,7 @@ void r_input(string file)
             {
                 Rover* pr = new Rover(rover_type, er_sp, er_ch, num_missions);
                 PR->enqueue(pr, pr_sp);
-            }
+            }*/
             //Assign_M_to_R(EM, PM, ER, PR, WL);
 
             cout <<
@@ -132,8 +132,10 @@ void r_input(string file)
 void Interactive_mode()
 {
     char x;
-    for (int d = 0; d < 2; d++)
+    for (int d = 0; d < 3; d++)
     {
+        cin.get(x);
+        system("CLS");
         int w_m = 7, i_e = 4, a_r = 4, i_c = 2, c_m = 3;
         cout << "Current Day: " << d << "\n";
         cout << w_m << " Waiting Missions: " << "[11, 13] (6, 8)\n";
@@ -145,8 +147,6 @@ void Interactive_mode()
         cout << i_c << " In-Checkup Rovers: " << "[2] (3)\n";
         cout << "------------------------------------------\n";
         cout << c_m << " Completed Missions: " << "(4) [1]\n\n\n";
-        //cin.get(x);
-        cin >> x;
     }
 }
 
@@ -154,6 +154,7 @@ void SbS_mode()
 {
     for (int d = 0; d < 2; d++)
     {
+        system("CLS");
         int w_m = 7, i_e = 4, a_r = 4, i_c = 2, c_m = 3;
         cout << "Current Day: " << d << "\n";
         cout << w_m << " Waiting Missions: " << "[11, 13] (6, 8)\n";
@@ -171,7 +172,8 @@ void SbS_mode()
 
 void Silent_mode()
 {
-    cout << "Silent Mode\nSimulation Starts...\nSimulation Ends, Output file created\n";
+    system("CLS");
+    cout << "Silent Mode\nSimulation Starts...\nSimulation Ends, Output file created\n\n\n";
 }
 
 void w_file(string fname)
@@ -189,33 +191,38 @@ void w_file(string fname)
 
 void p_output(string fname)
 {
+    system("CLS");
     int choice;
     while (true)
     {
-        system("CLS");
         cout << "1.Interactive mode\n2.Step-by-Step mode\n3.Silent mode\n4.Exit Program\n\n";
         cin >> choice;
         if (choice == 1)
         {
+            system("CLS");
             w_file(fname);
             Interactive_mode();
         }
         else if (choice == 2)
         {
+            system("CLS");
             w_file(fname);
             SbS_mode();
         }
         else if (choice == 3)
         {
+            system("CLS");
             w_file(fname);
             Silent_mode();
         }
         else if (choice == 4)
         {
+            system("CLS");
             break;
         }
         else
         {
+            system("CLS");
             cout << "Error! Incorrect input re-enter your choice...\n\n";
         }
     }
