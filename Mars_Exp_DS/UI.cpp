@@ -91,13 +91,13 @@ void r_input(string file)
             {
                 fptr >> event_type >> rover_type >> event_day >> ID >> tloc >> mdur >> sig;
 
-                /*if (event_type == 'F')
+                if (event_type == 'F')
                 {
                     Event* e = new FormulationEvent();
                     e->Execute(rover_type, event_day, ID, tloc, mdur, sig, EM, PM);
-                }*/
+                }
             }
-            /*for (int i = 0; i < num_er; i++)
+            for (int i = 0; i < num_er; i++)
             {
                 Rover* er = new Rover(rover_type, er_sp, er_ch, num_missions);
                 ER->enqueue(er, er_sp);
@@ -107,7 +107,7 @@ void r_input(string file)
                 Rover* pr = new Rover(rover_type, er_sp, er_ch, num_missions);
                 PR->enqueue(pr, pr_sp);
             }
-            Assign_M_to_R(EM, PM, ER, PR, WL);*/
+            //Assign_M_to_R(EM, PM, ER, PR, WL);
 
             cout <<
             num_pr << " " << num_er << "\n" <<
@@ -193,7 +193,7 @@ void p_output(string fname)
     while (true)
     {
         system("CLS");
-        cout << "\n1.Interactive mode\n2.Step-by-Step mode\n3.Silent mode\n4.Exit Program\n\n";
+        cout << "1.Interactive mode\n2.Step-by-Step mode\n3.Silent mode\n4.Exit Program\n\n";
         cin >> choice;
         if (choice == 1)
         {
