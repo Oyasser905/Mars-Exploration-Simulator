@@ -145,9 +145,9 @@ void UI::w_file(string fname)
     ofstream myfile(fname);
     if (myfile.is_open())
     {
-        cout << "CD\tID\tFD\tWD\tED\n";
-        cout << "------------------------------------------\n";
-        cout << "------------------------------------------\n";
+        myfile << "CD\tID\tFD\tWD\tED\n";
+        myfile << "------------------------------------------\n";
+        myfile << "------------------------------------------\n";
         myfile.close();
     }
     else cout << "Unable to write to file...";
@@ -183,7 +183,7 @@ void UI::p_output(string fname)
         else if (choice == 4)
         {
             system("CLS");
-            return;
+            break;
         }
         else
         {
