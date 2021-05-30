@@ -96,7 +96,7 @@ template <typename T>
 class LinkedQueue
 {
 private:
-	int size;
+	int size = 0;
 	NodeQ<T>* backPtr;
 	NodeQ<T>* frontPtr;
 public:
