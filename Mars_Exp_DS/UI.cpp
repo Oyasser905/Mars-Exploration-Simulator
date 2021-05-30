@@ -29,7 +29,7 @@ PriorityQueue<Rover*>* PR; //Polar Rovers Priority Queue
 PriorityQueue<Mission*>* EM; //Emergency Missions Priority Queue
 PriorityQueue<Mission*>* PM; //Polar Missions Priority Queue
 
-PriorityQueue<Mission>* WL; //Waiting list Priority Queue
+PriorityQueue<Mission*>* WL; //Waiting list Priority Queue
 
 
 void Assign_M_to_R(PriorityQueue<Mission*>*& EM, PriorityQueue<Mission*>*& PM, PriorityQueue<Rover*>*& ER, PriorityQueue<Rover*>*& PR, PriorityQueue<Mission*>*& WL)
@@ -93,11 +93,11 @@ void r_input(string file)
 
                 if (event_type == 'F')
                 {
-                    /*Event* e = new FormulationEvent();
-                    e->Execute(rover_type, event_day, ID, tloc, mdur, sig, EM, PM);*/
+                    Event* e = new FormulationEvent();
+                    e->Execute(rover_type, event_day, ID, tloc, mdur, sig, EM, PM);
                 }
             }
-            /*for (int i = 0; i < num_er; i++)
+            for (int i = 0; i < num_er; i++)
             {
                 Rover* er = new Rover(rover_type, er_sp, er_ch, num_missions);
                 ER->enqueue(er, er_sp);
@@ -106,7 +106,7 @@ void r_input(string file)
             {
                 Rover* pr = new Rover(rover_type, er_sp, er_ch, num_missions);
                 PR->enqueue(pr, pr_sp);
-            }*/
+            }
             //Assign_M_to_R(EM, PM, ER, PR, WL);
 
             cout <<
@@ -230,6 +230,12 @@ void p_output(string fname)
 
 int main()
 {
+    ER = new PriorityQueue<Rover*>();
+    PR = new PriorityQueue<Rover*>();
+    EM = new PriorityQueue<Mission*>();
+    PM = new PriorityQueue<Mission*>();
+    WL = new PriorityQueue<Mission*>();
+
     string i_file, o_file;
     cout << "(Please include file extension)\nEnter file name: ";
     cin >> i_file;
@@ -238,4 +244,6 @@ int main()
     cout << "(Please include file extension)\nEnter file name: ";
     cin >> o_file;
     p_output(o_file);
+
+    
 }
