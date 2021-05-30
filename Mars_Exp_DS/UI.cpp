@@ -166,7 +166,7 @@ void SbS_mode()
         cout << i_c << " In-Checkup Rovers: " << "[2] (3)\n";
         cout << "------------------------------------------\n";
         cout << c_m << " Completed Missions: " << "(4) [1]\n\n\n";
-        Sleep(3000);
+        Sleep(1500);
     }
 }
 
