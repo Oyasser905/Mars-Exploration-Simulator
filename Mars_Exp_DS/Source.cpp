@@ -15,4 +15,5 @@ using namespace std;
 int main()
 {
     MarsStation mars;
+    mars.UI_file();
 }

@@ -16,20 +16,15 @@ MarsStation obj;
 
 UI::UI()
 {
-    string i_file, o_file;
-    cout << "(Please include file extension)\nEnter input file name: ";
-    cin >> i_file;
-    r_input(i_file);
-
-    cout << "(Please include file extension)\nEnter output file name: ";
-    cin >> o_file;
-    p_output(o_file);
 }
 
-void UI::r_input(string file)
+void UI::r_input()
 {
+    string i_file;
+    cout << "(Please include file extension)\nEnter input file name: ";
+    cin >> i_file;
     string line;
-    ifstream fptr(file);
+    ifstream fptr(i_file);
     if (fptr.is_open())
     {
         cout << "\nFile opened successfully...\nFile Contents...\n\n";
@@ -154,8 +149,12 @@ void UI::w_file(string fname)
 }
 
 
-void UI::p_output(string fname)
+void UI::p_output()
 {
+    system("CLS");
+    string o_file;
+    cout << "(Please include file extension)\nEnter output file name: ";
+    cin >> o_file;
     system("CLS");
     int choice;
     while (true)
@@ -165,19 +164,19 @@ void UI::p_output(string fname)
         if (choice == 1)
         {
             system("CLS");
-            w_file(fname);
+            w_file(o_file);
             Interactive_mode();
         }
         else if (choice == 2)
         {
             system("CLS");
-            w_file(fname);
+            w_file(o_file);
             SbS_mode();
         }
         else if (choice == 3)
         {
             system("CLS");
-            w_file(fname);
+            w_file(o_file);
             Silent_mode();
         }
         else if (choice == 4)

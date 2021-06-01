@@ -25,10 +25,10 @@ class UI
 
 public:
 	UI();
-	void r_input(string file);
+	void r_input();
 	void Interactive_mode();
 	void SbS_mode();
 	void Silent_mode();
 	void w_file(string fname);
-	void p_output(string fname);
+	void p_output();
 };

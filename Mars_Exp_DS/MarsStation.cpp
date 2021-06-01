@@ -9,7 +9,13 @@ using namespace std;
 
 MarsStation::MarsStation()
 {
+}
+
+void MarsStation::UI_file()
+{
     UI uiobj;
+    uiobj.r_input();
+    uiobj.p_output();
 }
 
 bool MarsStation::NeedsCheckUp(Rover* R) //checks if the rover needs checkup, if yes sends it to checkup and changes variable "no_missions_completed" to zero
