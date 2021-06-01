@@ -146,11 +146,58 @@ void MarsStation::Assign_M_to_R(PriorityQueue<Mission*>*& EM, PriorityQueue<Miss
     }
 }
 
-//Omar
-void checkCompletedMissions()
+int checkCompletedMissions(PriorityQueue<Mission*>* m)
 {
-	return;
+    PriorityQueue<Mission*>* c = new PriorityQueue<Mission*>();
+
+    Mission* m2;
+    while (m->dequeue(m2))
+    {
+        if (m2->getStatus() == 'C')
+        {
+            c->sort_asc_enqueue(m2, m2->getWeight());
+        }
+
+    }
+    return c->getSize();
 }
 
 
+int GetFD() //To get the Formulation Day
+{
+    FormulationEvent e;
+    return e.getDay();
+}
+
+//int GetWD(PriorityQueue<Mission*>* m) //To get the Waiting Days
+//{
+//    the day the mission get assigned to a rover - the day the mission got formulated GetFD(e)
+//
+//}
+
+int GetED(Mission M, PriorityQueue<Rover*>* ER, PriorityQueue<Rover*>* PR) //To get the Execution Days 
+{
+    int Time;
+    Rover* r;
+    if (M.getType() == 'E')      //if it was an Emergency mission
+    {
+        ER->dequeue(r);
+        r->getSpeed();           
+        Time = M.getDuration() + ((M.getTargetLocation() / r->getSpeed()) * 2);    //(the days it takes to reach the target location, fulfill mission requirements, and then get back to the base station)
+    }
+    else if (M.getType() == 'P') //if it was an Polar rover
+    {
+        PR->dequeue(r);
+        r->getSpeed();            
+        Time = M.getDuration() + ((M.getTargetLocation() / r->getSpeed()) * 2);      //(the days it takes to reach the target location, fulfill mission requirements, and then get back to the base station)
+    }
+    return Time;
+}
+
+int GetCD(PriorityQueue<Mission*>* m, Mission M, PriorityQueue<Rover*>* ER, PriorityQueue<Rover*>* PR, FormulationEvent e) //To get the Completion Day
+{
+    int CD;
+    CD = /*GetWD(m)*/ +GetED(M, ER, PR) + GetFD(); //CD = FD + WD + ED
+    return CD;
+}
 
