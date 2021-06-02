@@ -16,4 +16,15 @@ int main()
 {
     MarsStation mars;
     mars.UI_file();
+    int currentday = 1;
+
+    while (!mars.CheckAreWeDone())
+    {
+        mars.setCurrentDay(currentday);
+        mars.ReturnFromCheckUp(); //returns rovers that have completed check up as some could have high speeds and hence higher priority
+        mars.Assign_M_to_R();
+
+
+        currentday++;
+    }
 }

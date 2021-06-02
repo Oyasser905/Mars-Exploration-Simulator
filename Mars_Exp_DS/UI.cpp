@@ -1,5 +1,6 @@
 #pragma once
 #include"priorityQueue.h"
+#include"Queue.h"
 #include"UI.h"
 #include <iostream>
 #include <fstream>

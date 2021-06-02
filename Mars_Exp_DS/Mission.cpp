@@ -39,7 +39,7 @@ void Mission::setSignificance(int sig)
 	significance = sig;
 }
 
-void Mission::setStatus(int s)
+void Mission::setStatus(char s)
 {
 	status = s;
 }
@@ -74,7 +74,7 @@ int Mission::getSignificance()
 	return significance;
 }
 
-int Mission::getStatus()
+char Mission::getStatus()
 {
 	return status;
 }
@@ -89,7 +89,7 @@ int Mission::calcWeight()
 	int weight = 0;
 	if (type == 'E')
 	{
-		weight = significance + targetLocation + duration;
+		weight = significance + targetLocation + duration; //+ status
 	}
 	return weight;
 }

@@ -11,7 +11,7 @@ private:
 	int targetLocation;
 	int duration;
 	int significance;
-	int status;
+	char status; //I : In-Execution    C: Completed    W: Waiting
 	int weight;
 public:
 	//constructors
@@ -24,7 +24,7 @@ public:
 	void setTargetLocation(int tloc);
 	void setDuration(int dur);
 	void setSignificance(int sig);
-	void setStatus(int s);
+	void setStatus(char s);
 
 	//getters
 	int getID();
@@ -33,7 +33,7 @@ public:
 	int getTargetLocation();
 	int getDuration();
 	int getSignificance();
-	int getStatus();
+	char getStatus();
 	int getWeight();
 
 	//member functions

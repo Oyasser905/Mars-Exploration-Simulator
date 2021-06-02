@@ -9,8 +9,9 @@ Rover::Rover(char t, int sp, int ch, int n)
 {
 	R_type = t; speed = sp; checkupDuration = ch, no_check = n;
 	no_missions_completed = 0; 
-	DaysSpentInCheckUp = 0;
+	DayToLeaveCheckUp = 75073; //this number would never be used except if there was a logical error
 	ptrToMission = nullptr;
+	DayToLeaveExecution = 75073; //this number would never be used except if there was a logical error
 }
 
 void Rover::setType(char t)
@@ -47,17 +48,19 @@ void Rover::IncrementMissionsCompleted(bool m)
 
 }
 
-void Rover::setDaysSpentInCheckup(bool m)
+void Rover::setDayToLeaveCheckup(int day1)
 {
-	if (m == 0)
-		DaysSpentInCheckUp = 0;
-	else
-		DaysSpentInCheckUp++;
+	DayToLeaveCheckUp = day1;
 }
 
 void Rover::setptrToMission(Mission* M)
 {
 	ptrToMission = M;
+}
+
+void Rover::setDayToLeaveFromExecution(int d)
+{
+	DayToLeaveExecution = d;
 }
 
 char Rover::getType()
@@ -90,14 +93,19 @@ int Rover::getNo_Missions_Completed()
 	return no_missions_completed;
 }
 
-int Rover::getDaysSpentInCheckUp()
+int Rover::getDayToLeaveCheckUp()
 {
-	return DaysSpentInCheckUp;
+	return DayToLeaveCheckUp;
 }
 
 Mission* Rover::getptrToMission()
 {
 	return ptrToMission;
+}
+
+int Rover::getDayToLeaveFromExecution()
+{
+	return DayToLeaveExecution;
 }
 
 
