@@ -25,6 +25,7 @@ class UI
 
 public:
 	UI();
+	void input_contents_console(string i_file);
 	void r_input();
 	void Interactive_mode();
 	void SbS_mode();

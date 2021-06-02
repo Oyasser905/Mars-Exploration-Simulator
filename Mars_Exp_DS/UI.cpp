@@ -18,16 +18,35 @@ UI::UI()
 {
 }
 
+void UI::input_contents_console(string i_file)
+{
+    string line;
+    ifstream fptr(i_file);
+    if (fptr.is_open())
+    {
+        while (getline(fptr, line))
+        {
+            cout << line << '\n';
+        }
+        fptr.close();
+    }
+    else 
+    {
+        cout << "Unable to open file";
+    }
+}
+
 void UI::r_input()
 {
     string i_file;
     cout << "(Please include file extension)\nEnter input file name: ";
     cin >> i_file;
-    string line;
     ifstream fptr(i_file);
     if (fptr.is_open())
     {
         cout << "\nFile opened successfully...\nFile Contents...\n\n";
+        input_contents_console(i_file);
+        cout << "\nPress any key to continue...\n\n";
         while (cin.get() && !fptr.eof())
         {
             char event_type; //Event type (formulation, cancellation, promotion)
@@ -67,20 +86,11 @@ void UI::r_input()
                 obj.PR->enqueue(pr, pr_sp);
             }
             //Assign_M_to_R(EM, PM, ER, PR, WL);
-
-            cout <<
-                num_pr << " " << num_er << "\n" <<
-                pr_sp << " " << er_sp << "\n" <<
-                num_missions << " " << pr_ch << " " << er_ch << "\n" <<
-                no_events << "\n";
-
-            for (int i = 0; i < no_events; i++)
-            {
-                cout << event_type << " " << rover_type << " " << event_day << " " << ID << " " << tloc << " " << mdur << " " << sig << "\n";
-            }
         }
         fptr.close();
-        cout << "File successfully closed...\n";
+        system("CLS");
+        cout << "File successfully closed...\n\n";
+        Sleep(2500);
     }
     else
     {
