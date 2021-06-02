@@ -39,12 +39,22 @@ void UI::input_contents_console(string i_file)
 void UI::r_input()
 {
     string i_file;
-    cout << "(Please include file extension)\nEnter input file name: ";
-    cin >> i_file;
-    ifstream fptr(i_file);
+    ifstream fptr;
+    //Check if input of file name is correct and in directory
+    do 
+    {
+        cout << "(Please include file extension)\nEnter input file name: ";
+        cin >> i_file;
+        fptr.open(i_file);
+        cout << "\nError! Unable to open input file successfully.\n\n";
+    } while (fptr.fail());
+
+    system("CLS");
+
+    //Input file name is correct 
     if (fptr.is_open())
     {
-        cout << "\nFile opened successfully...\nFile Contents...\n\n";
+        cout << "File opened successfully...\nFile Contents...\n\n";
         input_contents_console(i_file);
         cout << "\nPress any key to continue...\n\n";
         while (cin.get() && !fptr.eof())
