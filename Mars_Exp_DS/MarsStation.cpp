@@ -156,7 +156,7 @@ Rover* MarsStation::GetPolarRover() //returns polar rovers that have completed c
 void MarsStation::Assign_M_to_R()
 {
     Mission* m;
-    while ((EM->peek(m)) && (m->getDay() <= CurrentDay) && (m->getType() == 'E')) //assign emergency missions first //CHECK if it is not in execution
+    while ((EM->peek(m)) && (m->getDay() <= CurrentDay) && (m->getType() == 'E') && (m->getStatus()!='I')) //assign emergency missions first //CHECK if it is not in execution
     {
         Rover* EmergencyRover = GetEmergencyRover();
         if (EmergencyRover) //if an emergency rover was available
@@ -187,7 +187,22 @@ void MarsStation::Assign_M_to_R()
         }
     }
 
-    while ((PFAIL->peek(m)) && (m->getDay() == CurrentDay) && (m->getType() == 'P'))
+    //Law queue 3ady
+    //awel element status W
+    //3ayza 2a output el waiting el mawgood
+    //dequeue awel element staus W print ID
+    //enqueue it fel a5er
+    //w hafdal a3mel dequeue w a2ra w ashoof law howa mesh I w ba3d keda enqueue
+
+    //int GetWaitingNumber()
+    //{
+    //case 1
+    //3adad dequeue, increment only law el status! I, enqueue asc, dequeue while(element status != W)
+    //}
+    //case 2
+    //t
+
+    while ((PFAIL->peek(m)) && (m->getDay() == CurrentDay) && (m->getType() == 'P') && (m->getStatus()!='I'))
     {
         Rover* PolarRover = GetPolarRover();
         if (PolarRover) //if a polar rover was available
@@ -205,7 +220,7 @@ void MarsStation::Assign_M_to_R()
         }
     }
 
-    while ((PM->peek(m))&& (m->getDay() == CurrentDay) && (m->getType() == 'P')) //then assign polar missions
+    while ((PM->peek(m))&& (m->getDay() == CurrentDay) && (m->getType() == 'P') && (m->getStatus()!='I')) //then assign polar missions
     {
         Rover* PolarRover = GetPolarRover();
         if (PolarRover) //if an emergency rover was available
@@ -223,8 +238,47 @@ void MarsStation::Assign_M_to_R()
     }
 }
 
+void MarsStation::CheckCompleted()
+{
+    //RIE Rovers in execution
+    //Step 1:
+    //pointer beyshawer 3ala rover R:
+    //RIE->peek(R)
+    //pointer 3ala awel element fel RIE
+    //R->getDayToLeaveExecution == CurrentDay
+    //if yes dequeue this ROVER
+    //isFailed(note: you have a pointer on the rover mesh el mission nafsaha law 3ayza tegibi el mission el el rover dah beyshawer 3aleha use the fn getptrTomission (check betetketeb ezay)) (implement)
+    //returned true don't do anything
+    //else ...
+    //hatkamel
+    //Completed:
+    //set no_missions_completed(1)
+    //NeedsCheckUp(R, 'C')
+    //enqueue el mission fel CM(priority queue) sort asc (m, getCD)
+
+}
+
+bool MarsStation::isFailed(Mission* m)
+{
+    //Mai
+    //isFailed
+    //Random generating function
+    //(if conditions) to see if function returned numbers chosen
+    //law el conditions el gowa el if, true which means enaha failed sa3etha hane3mel these steps:
+    //Step 1: send rover to checkup by writing NeedsCheckUp(R,'F') (where F means the mission failed)
+    //step 2: setstatus mission b 'F'
+    //Step 3: neb3at el mission 3ashan teb2a executed tany:
+    // -Law heya Polar MISSION (mesh polar ROVER) sa3etha enqueue it to PFAIL
+    // -LAW heya Emergency mission enqueue it f EM w hateb2a fel awel la2en el priority lel FAIL a3la 7aga
+    //return true law el kalaam el foo2 kaan sa7
+}
+
+
+
+
+
 //Omar AbdelAzeem
-//int MarsStation::getCompletedMissions()
+//int MarsStation::getCompletedMission()
 //{
    // Mission* m2;
     //while (->dequeue(m2))
@@ -235,14 +289,16 @@ void MarsStation::Assign_M_to_R()
 //}
 
 //Omar AbdelAzeem
-//int GetFD() //To get the Formulation Day
+//int MarsStation::GetFD() //To get the Formulation Day
 //{
   //  FormulationEvent e;
     //return e.getDay();
 //}
 
-//int GetWD(PriorityQueue<Mission*>* m) //To get the Waiting Days
+//int MarsStation::GetWD(PriorityQueue<Mission*>* m) //To get the Waiting Days
 //{
+
+//daytoleaveexecution (getter) - getED() -eventday
 //    the day the mission get assigned to a rover - the day the mission got formulated GetFD(e)
 //
 //}
@@ -250,27 +306,27 @@ void MarsStation::Assign_M_to_R()
 //Omar AbdelAzeem
 int MarsStation::GetED(Mission* M, char rovertype) //To get the Execution Days 
 {
-    float Time;
+    int Day;
     Rover* r;
     if ((M->getType() == 'E') && (rovertype=='E')) //if it was an Emergency mission with an emergency rover assigned to it
     {
         ER->peek(r);
         r->getSpeed();           
-        Time = ceil(M->getDuration() + (((M->getTargetLocation() / r->getSpeed()) / 25) * 2));    //(the days it takes to reach the target location, fulfill mission requirements, and then get back to the base station)
+        Day = ceil(M->getDuration() + (((M->getTargetLocation() / r->getSpeed()) / 25) * 2));    //(the days it takes to reach the target location, fulfill mission requirements, and then get back to the base station)
     }
     else if ((M->getType() == 'E') && (rovertype == 'P')) //if it was an Emergency mission with a polar rover assigned to it
     {
         PR->peek(r);
         r->getSpeed();
-        Time = ceil(M->getDuration() + (((M->getTargetLocation() / r->getSpeed())/25) * 2));      //(the days it takes to reach the target location, fulfill mission requirements, and then get back to the base station)
+        Day = ceil(M->getDuration() + (((M->getTargetLocation() / r->getSpeed())/25) * 2));      //(the days it takes to reach the target location, fulfill mission requirements, and then get back to the base station)
     }
     else if ((M->getType() == 'P') && (rovertype=='P')) //if it was a Polar mission it must have a polar rover
     {
         PR->peek(r);
         r->getSpeed();            
-        Time = ceil(M->getDuration() + ((M->getTargetLocation() / r->getSpeed()) / 25)*2);      //(the days it takes to reach the target location, fulfill mission requirements, and then get back to the base station)
+        Day = ceil(M->getDuration() + ((M->getTargetLocation() / r->getSpeed()) / 25)*2);      //(the days it takes to reach the target location, fulfill mission requirements, and then get back to the base station)
     }
-    return Time;
+    return Day;
 }
 
 //Omar AbdelAzeem

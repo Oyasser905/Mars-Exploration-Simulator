@@ -32,11 +32,13 @@ public:
 	Rover* GetPolarRover();
 	void Assign_M_to_R();
 	void UI_file();
-	int getCompletedMissions();
+	//int getCompletedMissions();
 	bool CheckAreWeDone(); //function to check if there are no missions to be assigned or no missions to execute, so we can exit the program, returns 0 or 1
 	int GetED(Mission* M, char c); //To get the Execution Days 
 	int GetCD(PriorityQueue<Mission*>* m, Mission M, PriorityQueue<Rover*>* ER, PriorityQueue<Rover*>* PR, FormulationEvent e); //To get the Completion Day
 	void setCurrentDay(int day);
 	int getCurrentDay();
+	void CheckCompleted();
+	bool isFailed(Mission* m)
 
 };

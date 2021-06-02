@@ -89,7 +89,7 @@ int Mission::calcWeight()
 	int weight = 0;
 	if (type == 'E')
 	{
-		weight = significance + targetLocation + duration; //+ status
+		weight = significance + targetLocation + duration; //+ status (F: FAIL High Priority), (I: InExecution LOW PRO)
 	}
 	return weight;
 }
