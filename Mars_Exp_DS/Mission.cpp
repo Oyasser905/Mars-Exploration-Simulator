@@ -89,11 +89,14 @@ int Mission::calcWeight()
 {
 	int weight = 0;
 	int F=0; //Failure Factor
+	int I = 0;
 	if (getStatus() == 'F') //status (F: FAIL High Priority)
 		F = 100;
+	if (getStatus() == 'I')
+		I = -100;
 	const int avgspeed = 6; //average speed of a rover
 	int Day = ceil(duration + ((targetLocation / avgspeed) / 25) * 2); 
-	weight = Day + F * 1.5 + significance; 
+	weight = Day + (F * 1.5) + significance +(I*1.5); 
 
 	return weight;
 }

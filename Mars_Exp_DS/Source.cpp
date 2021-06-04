@@ -17,15 +17,15 @@ int main()
     MarsStation mars;
     mars.UI_file();
     int currentday = 1;
-
+    //step 1: read info and distribute 3ashan ye2dar yed5ol fel while
+    //step 2: output yezhar ma3 el currentday
+    //therefore create link
     while (!mars.CheckAreWeDone())
     {
         mars.setCurrentDay(currentday);
         mars.CheckCompleted();
         mars.ReturnFromCheckUp(); //returns rovers that have completed check up as some could have high speeds and hence higher priority
         mars.Assign_M_to_R();
-
-
         currentday++;
     }
 }

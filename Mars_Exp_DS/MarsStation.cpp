@@ -314,6 +314,38 @@ void MarsStation::Assign_M_to_R()
     }
 }
 
+void MarsStation::O_WaitingEM()
+{
+
+    //law awel element status W keda fih 7agaat waiting
+    //tayeb eh el waiting (lel 7agaat el ba3do) howa el el eventday beta3o ==currentday aw el eventday beta30 faat w kamaan en el status not IE 
+    //dequeue ha2ra el data law el lesa aylah sa7 then call asc queue and pass el M fa hatet7at fel a5er
+    //w hafdal a3mel keda le7ad 
+    //int s=size;
+    Mission* M;
+    int size = EM->getSize();
+    if ((EM->peek(M)) && (M->getStatus() == 'W'))
+    {
+        cout << "[ ";
+        for (int i = 0; i < size; i++)
+        {
+            EM->dequeue(M);
+            EM->sort_asc_enqueue(M, M->calcWeight());
+            if ((M->getDay() <= CurrentDay) && (M->getStatus() != 'I'))
+            {
+                cout << M->getID() << " , ";
+            }
+        }
+        cout << "]";
+        for (int i = 0; i < size; i++)
+        {
+            EM->dequeue(M);
+            EM->enqueue(M, M->calcWeight());
+        }
+    }
+    return;
+}
+
 //Law queue 3ady
 //awel element status W
 //3ayza 2a output el waiting el mawgood
