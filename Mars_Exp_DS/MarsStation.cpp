@@ -242,23 +242,8 @@ void MarsStation::Assign_M_to_R()
 //Mai
 void MarsStation::CheckCompleted()
 {
-    //RIE Rovers in execution
-    //Step 1:
-    //pointer beyshawer 3ala rover R:
-    //RIE->peek(R)
-    //pointer 3ala awel element fel RIE
-    //R->getDayToLeaveExecution == CurrentDay
-    //if yes dequeue this ROVER
-    //isFailed(note: you have a pointer on the rover mesh el mission nafsaha law 3ayza tegibi el mission el el rover dah beyshawer 3aleha use the fn getptrTomission (check betetketeb ezay)) (implement)
-    //returned true don't do anything
-    //else ...
-    //hatkamel
-    //Completed:
-    //set no_missions_completed(1)
-    //NeedsCheckUp(R, 'C')
-    //enqueue el mission fel CM(priority queue) sort asc (m, getCD)
-
     Rover* R;
+    Mission* M;
     bool ans;
     while ((RIE->peek(R))&&(R->getDayToLeaveFromExecution() == CurrentDay))
     {
@@ -279,7 +264,9 @@ void MarsStation::CheckCompleted()
                     PR->enqueue(R, R->getSpeed());
                 }
             }
+            M = R->getptrToMission();
             //CM->sort_asc_enqueue(R->getptrToMission(), GetCD());
+            delete M;
         }
 
     }
@@ -288,16 +275,7 @@ void MarsStation::CheckCompleted()
 //Mai
 bool MarsStation::isFailed(Mission* M, Rover* R)
 {
-    //isFailed
-    //Random generating function
-    //(if conditions) to see if function returned numbers chosen
-    //law el conditions el gowa el if, true which means enaha failed sa3etha hane3mel these steps:
-    //Step 1: send rover to checkup by writing NeedsCheckUp(R,'F') (where F means the mission failed)
-    //step 2: setstatus mission b 'F'
-    //Step 3: neb3at el mission 3ashan teb2a executed tany:
-    // -Law heya Polar MISSION (mesh polar ROVER) sa3etha enqueue it to PFAIL
-    // -LAW heya Emergency mission enqueue it f EM w hateb2a fel awel la2en el priority lel FAIL a3la 7aga
-    //return true law el kalaam el foo2 kaan sa7
+
     srand(time(NULL));
     int failure = rand() % 100 + 1;
     if ((failure == 71) || (failure == 88) || (failure == 38) || (failure == 3) || (failure == 100) || (failure == 50))
@@ -308,10 +286,12 @@ bool MarsStation::isFailed(Mission* M, Rover* R)
         if (c == 'P')
         {
             PFAIL->enqueue(M);
+            delete M;
         }
         else if (c == 'E')
         {
             EM->enqueue(M, M->calcWeight());
+            delete M;
         }
         return true;
     }
