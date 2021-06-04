@@ -5,6 +5,7 @@
 #include"Rover.h"
 #include "FormulationEvent.h"
 #include "MarsStation.h"
+#include "time.h"
 using namespace std;
 
 MarsStation::MarsStation()
@@ -238,6 +239,7 @@ void MarsStation::Assign_M_to_R()
     }
 }
 
+//Mai
 void MarsStation::CheckCompleted()
 {
     //RIE Rovers in execution
@@ -256,11 +258,24 @@ void MarsStation::CheckCompleted()
     //NeedsCheckUp(R, 'C')
     //enqueue el mission fel CM(priority queue) sort asc (m, getCD)
 
+    Rover* R;
+    RIE->peek(R);
+    if (R->getDayToLeaveCheckUp() == CurrentDay)
+    {
+        RIE->dequeue(R);
+        if (!isFailed(R->getptrToMission(),R))
+        {
+            R->IncrementMissionsCompleted(1);
+            NeedsCheckUp(R, 'C');
+            //CM->sort_asc_enqueue(R->getptrToMission(), GetCD());
+        }
+
+    }
 }
 
-bool MarsStation::isFailed(Mission* m)
+//Mai
+bool MarsStation::isFailed(Mission* M, Rover* R)
 {
-    //Mai
     //isFailed
     //Random generating function
     //(if conditions) to see if function returned numbers chosen
@@ -271,6 +286,25 @@ bool MarsStation::isFailed(Mission* m)
     // -Law heya Polar MISSION (mesh polar ROVER) sa3etha enqueue it to PFAIL
     // -LAW heya Emergency mission enqueue it f EM w hateb2a fel awel la2en el priority lel FAIL a3la 7aga
     //return true law el kalaam el foo2 kaan sa7
+    srand(time(NULL));
+    int failure = rand() % 100 + 1;
+    if ((failure == 71) || (failure == 88) || (failure == 38) || (failure == 3) || (failure == 100) || (failure == 50))
+    {
+        NeedsCheckUp(R, 'F');
+        M->setStatus('F');
+        char c = M->getType();
+        if (c == 'P')
+        {
+            PFAIL->enqueue(M);
+        }
+        else if (c == 'E')
+        {
+            EM->enqueue(M, M->calcWeight());
+        }
+        return true;
+    }
+    else
+        return false;
 }
 
 

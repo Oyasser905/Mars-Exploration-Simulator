@@ -39,6 +39,6 @@ public:
 	void setCurrentDay(int day);
 	int getCurrentDay();
 	void CheckCompleted();
-	bool isFailed(Mission* m)
+	bool isFailed(Mission* m, Rover* R);
 
 };

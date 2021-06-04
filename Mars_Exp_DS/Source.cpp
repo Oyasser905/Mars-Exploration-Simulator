@@ -29,8 +29,8 @@ int main()
     }
 }
 
-//Number 1: Completed Mai
-//Number 2: isFailed
+//Number 1: Completed Mai          //DONE//
+//Number 2: isFailed               //DONE//
 //Number 3: ne5ali el 7agaat private kolaha w ne3mel setters w getters lel queues/prqueues el bAS hanesta5demha bara el class
 //Number 4: Read from input file different speeds aly.txt
 //Number 5: omar: getCD, WD, wel 7agaat el tanya
