@@ -75,6 +75,8 @@ void UI::r_input()
                 num_missions >> pr_ch >> er_ch >>
                 no_events;
 
+            PriorityQueue<Mission*>*  EM;
+            LinkedQueue<Mission*>*  PM;
             for (int i = 0; i <= no_events; i++)
             {
                 fptr >> event_type >> rover_type >> event_day >> ID >> tloc >> mdur >> sig;
@@ -82,7 +84,9 @@ void UI::r_input()
                 if (event_type == 'F')
                 {
                     Event* e = new FormulationEvent();
-                    e->Execute(rover_type, event_day, ID, tloc, mdur, sig, obj.GetEM(), obj.GetPM());
+                    EM = obj.GetEM();
+                    PM = obj.GetPM();
+                    e->Execute(rover_type, event_day, ID, tloc, mdur, sig, EM, PM);
                 }
             }
             for (int i = 0; i < num_er; i++)
