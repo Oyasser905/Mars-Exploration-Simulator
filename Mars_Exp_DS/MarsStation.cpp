@@ -188,21 +188,6 @@ void MarsStation::Assign_M_to_R()
         }
     }
 
-    //Law queue 3ady
-    //awel element status W
-    //3ayza 2a output el waiting el mawgood
-    //dequeue awel element staus W print ID
-    //enqueue it fel a5er
-    //w hafdal a3mel dequeue w a2ra w ashoof law howa mesh I w ba3d keda enqueue
-
-    //int GetWaitingNumber()
-    //{
-    //case 1
-    //3adad dequeue, increment only law el status! I, enqueue asc, dequeue while(element status != W)
-    //}
-    //case 2
-    //t
-
     while ((PFAIL->peek(m)) && (m->getDay() == CurrentDay) && (m->getType() == 'P') && (m->getStatus()!='I'))
     {
         Rover* PolarRover = GetPolarRover();
@@ -239,6 +224,21 @@ void MarsStation::Assign_M_to_R()
     }
 }
 
+//Law queue 3ady
+//awel element status W
+//3ayza 2a output el waiting el mawgood
+//dequeue awel element staus W print ID
+//enqueue it fel a5er
+//w hafdal a3mel dequeue w a2ra w ashoof law howa mesh I w ba3d keda enqueue
+
+//int GetWaitingNumber()
+//{
+//case 1
+//3adad dequeue, increment only law el status! I, enqueue asc, dequeue while(element status != W)
+//}
+//case 2
+//t
+
 //Mai
 void MarsStation::CheckCompleted()
 {
@@ -259,14 +259,26 @@ void MarsStation::CheckCompleted()
     //enqueue el mission fel CM(priority queue) sort asc (m, getCD)
 
     Rover* R;
-    RIE->peek(R);
-    if (R->getDayToLeaveCheckUp() == CurrentDay)
+    bool ans;
+    while ((RIE->peek(R))&&(R->getDayToLeaveFromExecution() == CurrentDay))
     {
         RIE->dequeue(R);
         if (!isFailed(R->getptrToMission(),R))
         {
             R->IncrementMissionsCompleted(1);
-            NeedsCheckUp(R, 'C');
+            (R->getptrToMission())->setStatus('C');
+            ans=NeedsCheckUp(R, 'C');
+            if (!ans)
+            {
+                if (R->getType() == 'E')
+                {
+                    ER->enqueue(R, R->getSpeed());
+                }
+                else if (R->getType() == 'P')
+                {
+                    PR->enqueue(R, R->getSpeed());
+                }
+            }
             //CM->sort_asc_enqueue(R->getptrToMission(), GetCD());
         }
 
