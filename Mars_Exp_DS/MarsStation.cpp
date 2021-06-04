@@ -26,10 +26,100 @@ void MarsStation::setCurrentDay(int day)
     CurrentDay = day;
 }
 
+void MarsStation::setEM(PriorityQueue<Mission*>* ME)
+{
+    EM = ME;
+}
+
+void MarsStation::setPM(LinkedQueue<Mission*>* MP)
+{
+    PM = MP;
+}
+
+void MarsStation::setER(PriorityQueue<Rover*>* RE)
+{
+    ER = RE;
+}
+
+void MarsStation::setPR(PriorityQueue<Rover*>* RP)
+{
+    PR = RP;
+}
+
+void MarsStation::setERCH(LinkedQueue<Rover*>* CHER)
+{
+    ERCH = CHER;
+}
+
+void MarsStation::setPRCH(LinkedQueue<Rover*>* CHPR)
+{
+    PRCH = CHPR;
+}
+
+void MarsStation::setRIE(PriorityQueue<Rover*>* RI)
+{
+    RIE = RI;
+}
+
+void MarsStation::setPFAIL(LinkedQueue<Mission*>* PF)
+{
+    PFAIL = PF;
+}
+
+void MarsStation::setCM(PriorityQueue<Mission*>* C)
+{
+    CM = C;
+}
+
 //Malak
 int MarsStation::getCurrentDay()
 {
     return CurrentDay;
+}
+
+PriorityQueue<Mission*>* MarsStation::GetEM()
+{
+    return EM;
+}
+
+LinkedQueue<Mission*>* MarsStation::GetPM()
+{
+    return PM;
+}
+
+PriorityQueue<Rover*>* MarsStation::GetER()
+{
+    return ER;
+}
+
+PriorityQueue<Rover*>* MarsStation::GetPR()
+{
+    return PR;
+}
+
+LinkedQueue<Rover*>* MarsStation::GetERCH()
+{
+    return ERCH;
+}
+
+LinkedQueue<Rover*>* MarsStation::GetPRCH()
+{
+    return PRCH;
+}
+
+PriorityQueue<Rover*>* MarsStation::GetRIE()
+{
+    return RIE;
+}
+
+LinkedQueue<Mission*>* MarsStation::GetPFAIL()
+{
+    return PFAIL;
+}
+
+PriorityQueue<Mission*>* MarsStation::GetCM()
+{
+    return CM;
 }
 
 //Malak

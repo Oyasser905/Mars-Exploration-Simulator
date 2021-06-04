@@ -82,19 +82,19 @@ void UI::r_input()
                 if (event_type == 'F')
                 {
                     Event* e = new FormulationEvent();
-                    e->Execute(rover_type, event_day, ID, tloc, mdur, sig, obj.EM, obj.PM);
+                    e->Execute(rover_type, event_day, ID, tloc, mdur, sig, obj.GetEM(), obj.GetPM());
                 }
             }
             for (int i = 0; i < num_er; i++)
             {
                 Rover* er = new Rover(rover_type, er_sp, er_ch, num_missions);
                 
-                obj.ER->enqueue(er, er_sp);
+                obj.GetER()->enqueue(er, er_sp);
             }
             for (int i = 0; i < num_pr; i++)
             {
                 Rover* pr = new Rover(rover_type, er_sp, er_ch, num_missions);
-                obj.PR->enqueue(pr, pr_sp);
+                obj.GetPR()->enqueue(pr, pr_sp);
             }
             //Assign_M_to_R(EM, PM, ER, PR, WL);
         }
