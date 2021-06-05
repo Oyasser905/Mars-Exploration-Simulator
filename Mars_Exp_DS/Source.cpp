@@ -18,11 +18,13 @@ int main()
     mars.UI_r();
     int currentday = 1;
     mars.setCurrentDay(currentday);
+    mars.chooseMode();
     //step 1: read info and distribute 3ashan ye2dar yed5ol fel while
     //step 2: output yezhar ma3 el currentday
     //therefore create link
     while (!mars.CheckAreWeDone())
     {
+        mars.checkEvents();
         mars.UI_w();
         mars.setCurrentDay(currentday);
         mars.CheckCompleted();

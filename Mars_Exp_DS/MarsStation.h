@@ -1,27 +1,29 @@
 #pragma once
+#include "UI.h"
 
 class MarsStation
 {
 
 private:
 	int CurrentDay;
-	LinkedQueue<Event*>* EV = new LinkedQueue<Event*>();
+	LinkedQueue<Event*>* EV;
 
-	PriorityQueue<Rover*>* ER = new PriorityQueue<Rover*>(); //Emergency Rovers Priority Queue
-	PriorityQueue<Rover*>* PR = new PriorityQueue<Rover*>(); //Polar Rovers Priority Queue
+	PriorityQueue<Rover*>* ER; //Emergency Rovers Priority Queue
+	PriorityQueue<Rover*>* PR;//Polar Rovers Priority Queue
 
-	PriorityQueue<Mission*>* EM = new PriorityQueue<Mission*>(); //Emergency Missions Priority Queue
-	LinkedQueue<Mission*>* PM = new LinkedQueue<Mission*>(); //Polar Missions Queue
+	PriorityQueue<Mission*>* EM; //Emergency Missions Priority Queue
+	LinkedQueue<Mission*>* PM ; //Polar Missions Queue
 
-	LinkedQueue<Rover*>* ERCH = new LinkedQueue<Rover*>(); //Emergency Rovers Check-Up Queue;
-	LinkedQueue<Rover*>* PRCH = new LinkedQueue<Rover*>(); //Polar Rovers Check-Up Queue;
+	LinkedQueue<Rover*>* ERCH ; //Emergency Rovers Check-Up Queue;
+	LinkedQueue<Rover*>* PRCH ; //Polar Rovers Check-Up Queue;
 
 
-	PriorityQueue<Rover*>* RIE = new PriorityQueue<Rover*>(); //Rovers executing missions priority queue
+	PriorityQueue<Rover*>* RIE ; //Rovers executing missions priority queue
 
-	LinkedQueue<Mission*>* PFAIL = new LinkedQueue<Mission*>(); //Queue for failed polar missions
+	LinkedQueue<Mission*>* PFAIL ; //Queue for failed polar missions
 
-	PriorityQueue<Mission*>* CM = new PriorityQueue<Mission*>(); //Priority Queue for completed missions
+	PriorityQueue<Mission*>* CM ; //Priority Queue for completed missions
+	UI* uiobj;
 public:
 
 	MarsStation();
@@ -68,4 +70,5 @@ public:
 	bool isFailed(Mission* m, Rover* R);
 	void O_WaitingEM();
 	void checkEvents(); //distributes the events
+	void chooseMode();
 };

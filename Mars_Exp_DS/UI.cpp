@@ -7,16 +7,17 @@
 #include <string>
 #include"Mission.h"
 #include"Rover.h"
-#include"MarsStation.h"
 #include"FormulationEvent.h"
 #include"priorityQueue.h"
 #include"windows.h"
+#include "MarsStation.h"
+
 using namespace std;
 
-MarsStation obj;
 
-UI::UI()
+UI::UI(MarsStation* st)
 {
+    obj = st;
 }
 
 void UI::input_contents_console(string i_file)
@@ -39,17 +40,17 @@ void UI::input_contents_console(string i_file)
 
 void UI::r_input()
 {
-    string i_file;
+    string i_file = "input_info.txt";
     ifstream fptr;
     //Check if input of file name is correct and in directory
-    do 
+    /*do 
     {
         cout << "(Please include file extension)\nEnter input file name: ";
         cin >> i_file;
         fptr.open(i_file);
         cout << "\nError! Unable to open input file successfully.\n\n";
-    } while (fptr.fail());
-
+    } while (fptr.fail());*/
+    fptr.open(i_file);
     system("CLS");
 
     //Input file name is correct 
@@ -77,7 +78,7 @@ void UI::r_input()
 
             PriorityQueue<Mission*>*  EM;
             LinkedQueue<Mission*>*  PM;
-            LinkedQueue<Event*>* EV;
+            LinkedQueue<Event*>* EV = obj->GetEV();
             for (int i = 0; i <= no_events; i++)
             {
                 fptr >> event_type >> rover_type >> event_day >> ID >> tloc >> mdur >> sig;
@@ -85,22 +86,22 @@ void UI::r_input()
                 if (event_type == 'F')
                 {
                     Event* f = new FormulationEvent(rover_type, event_day, ID, tloc, mdur, sig, EM, PM);
-                    EM = obj.GetEM();
-                    PM = obj.GetPM();
-                    EV = obj.GetEV();
+                    EM = obj->GetEM();
+                    PM = obj->GetPM();
                     EV->enqueue(f);
                 }
             }
+            obj->setEV(EV);
             for (int i = 0; i < num_er; i++)
             {
                 Rover* er = new Rover(rover_type, er_sp, er_ch, num_missions);
                 
-                obj.GetER()->enqueue(er, er_sp);
+                obj->GetER()->enqueue(er, er_sp);
             }
             for (int i = 0; i < num_pr; i++)
             {
                 Rover* pr = new Rover(rover_type, er_sp, er_ch, num_missions);
-                obj.GetPR()->enqueue(pr, pr_sp);
+                obj->GetPR()->enqueue(pr, pr_sp);
             }
             //Assign_M_to_R(EM, PM, ER, PR, WL);
         }
@@ -118,22 +119,20 @@ void UI::r_input()
 void UI::Interactive_mode()
 {
     char x;
-    for (int d = 0; d < 3; d++)
-    {
-        cin.get(x);
-        system("CLS");
-        int w_m = 7, i_e = 4, a_r = 4, i_c = 2, c_m = 3;
-        cout << "Current Day: " << d << "\n";
-        cout << w_m << " Waiting Missions: " << "[11, 13] (6, 8)\n";
-        cout << "------------------------------------------\n";
-        cout << a_r << " In-Execution Missions/Rovers: " << "[2/1, 10/7] (3/5)\n";
-        cout << "------------------------------------------\n";
-        cout << w_m << " Available Rovers: " << "[4, 6] (10)\n";
-        cout << "------------------------------------------\n";
-        cout << i_c << " In-Checkup Rovers: " << "[2] (3)\n";
-        cout << "------------------------------------------\n";
-        cout << c_m << " Completed Missions: " << "(4) [1]\n\n\n";
-    }
+    cin.get(x);
+    system("CLS");
+    cout << "Current Day: " << obj->getCurrentDay() << "\n";
+    int w_m = 7, i_e = 4, a_r = 4, i_c = 2, c_m = 3;
+    cout << w_m << " Waiting Missions: " << "[11, 13] (6, 8)\n";
+    cout << "------------------------------------------\n";
+    cout << a_r << " In-Execution Missions/Rovers: " << "[2/1, 10/7] (3/5)\n";
+    cout << "------------------------------------------\n";
+    cout << w_m << " Available Rovers: " << "[4, 6] (10)\n";
+    cout << "------------------------------------------\n";
+    cout << i_c << " In-Checkup Rovers: " << "[2] (3)\n";
+    cout << "------------------------------------------\n";
+    cout << c_m << " Completed Missions: " << "(4) [1]\n\n\n";
+    
 }
 
 void UI::SbS_mode()
@@ -178,43 +177,56 @@ void UI::w_file(string fname)
 
 void UI::p_output()
 {
+    if (mode == 1)
+    {
+        Interactive_mode();
+    }
+    else if (mode == 2)
+    {
+        SbS_mode();
+
+    }
+    else
+    {
+        Silent_mode();
+
+    }
+}
+
+void UI::chooseMode()
+{
     system("CLS");
     string o_file;
     cout << "(Please include file extension)\nEnter output file name: ";
     cin >> o_file;
-    system("CLS");
     int choice;
-    while (true)
+    cout << "1.Interactive mode\n2.Step-by-Step mode\n3.Silent mode\n4.Exit Program\n\n";
+    cin >> choice;
+    if (choice == 1)
     {
-        cout << "1.Interactive mode\n2.Step-by-Step mode\n3.Silent mode\n4.Exit Program\n\n";
-        cin >> choice;
-        if (choice == 1)
-        {
-            system("CLS");
-            w_file(o_file);
-            Interactive_mode();
-        }
-        else if (choice == 2)
-        {
-            system("CLS");
-            w_file(o_file);
-            SbS_mode();
-        }
-        else if (choice == 3)
-        {
-            system("CLS");
-            w_file(o_file);
-            Silent_mode();
-        }
-        else if (choice == 4)
-        {
-            system("CLS");
-            break;
-        }
-        else
-        {
-            system("CLS");
-            cout << "Error! Incorrect input re-enter your choice...\n\n";
-        }
+        system("CLS");
+        w_file(o_file);
+        mode = 1;
+    }
+    else if (choice == 2)
+    {
+        system("CLS");
+        w_file(o_file);
+        mode = 2;
+    }
+    else if (choice == 3)
+    {
+        system("CLS");
+        w_file(o_file);
+        mode = 3;
+    }
+    else if (choice == 4)
+    {
+        system("CLS");
+    }
+    else
+    {
+        system("CLS");
+        cout << "Error! Incorrect input re-enter your choice...\n\n";
     }
 }

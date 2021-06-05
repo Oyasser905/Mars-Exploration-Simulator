@@ -10,19 +10,35 @@ using namespace std;
 
 MarsStation::MarsStation()
 {
+    EV = new LinkedQueue<Event*>();
+
+    ER = new PriorityQueue<Rover*>(); //Emergency Rovers Priority Queue
+    PR = new PriorityQueue<Rover*>(); //Polar Rovers Priority Queue
+
+    EM = new PriorityQueue<Mission*>(); //Emergency Missions Priority Queue
+    PM = new LinkedQueue<Mission*>(); //Polar Missions Queue
+
+    ERCH = new LinkedQueue<Rover*>(); //Emergency Rovers Check-Up Queue;
+    PRCH = new LinkedQueue<Rover*>(); //Polar Rovers Check-Up Queue;
+
+    RIE = new PriorityQueue<Rover*>(); //Rovers executing missions priority queue
+
+    PFAIL = new LinkedQueue<Mission*>(); //Queue for failed polar missions
+
+    CM = new PriorityQueue<Mission*>(); //Priority Queue for completed missions
+    uiobj = new UI(this);
 }
 
 //Omar Yasser
 void MarsStation::UI_r()
 {
-    UI uiobj;
-    uiobj.r_input();
+    
+    uiobj->r_input();
 }
 
 void MarsStation::UI_w()
 {
-    UI uiobj;
-    uiobj.p_output();
+    uiobj->p_output();
 }
 //Malak
 void MarsStation::setCurrentDay(int day)
@@ -32,6 +48,7 @@ void MarsStation::setCurrentDay(int day)
 
 void MarsStation::setEV(LinkedQueue<Event*>* e)
 {
+
     EV = e;
 }
 
@@ -370,6 +387,11 @@ void MarsStation::checkEvents()
         E->Execute();
         EV->peek(E);
     }
+}
+
+void MarsStation::chooseMode()
+{
+    uiobj->chooseMode();
 }
 
 //Law queue 3ady

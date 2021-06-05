@@ -2,12 +2,15 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include"Mission.h"
-#include"Rover.h"
+#include "Mission.h"
+#include "Rover.h"
 #include "FormulationEvent.h"
-#include"priorityQueue.h"
-#include"Queue.h"
+#include "priorityQueue.h"
+#include "Queue.h"
 using namespace std;
+
+class MarsStation;
+
 
 class UI
 {
@@ -22,9 +25,11 @@ class UI
 	int er_ch; //Emergency check up duration
 
 	int no_events; //No. of events
+	int mode;
+	MarsStation* obj;
 
 public:
-	UI();
+	UI(MarsStation*);
 	void input_contents_console(string i_file);
 	void r_input();
 	void Interactive_mode();
@@ -32,4 +37,5 @@ public:
 	void Silent_mode();
 	void w_file(string fname);
 	void p_output();
+	void chooseMode();
 };
