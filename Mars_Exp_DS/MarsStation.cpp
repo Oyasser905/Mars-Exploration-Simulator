@@ -30,6 +30,11 @@ void MarsStation::setCurrentDay(int day)
     CurrentDay = day;
 }
 
+void MarsStation::setEV(LinkedQueue<Event*>* e)
+{
+    EV = e;
+}
+
 void MarsStation::setEM(PriorityQueue<Mission*>* ME)
 {
     EM = ME;
@@ -106,6 +111,11 @@ LinkedQueue<Rover*>* MarsStation::GetERCH()
     return ERCH;
 }
 
+LinkedQueue<Event*>* MarsStation::GetEV()
+{
+    return EV;
+}
+
 LinkedQueue<Rover*>* MarsStation::GetPRCH()
 {
     return PRCH;
@@ -129,7 +139,7 @@ PriorityQueue<Mission*>* MarsStation::GetCM()
 //Malak
 bool MarsStation::CheckAreWeDone()
 {
-    if (EM->isEmpty() && PM->isEmpty() && PFAIL->isEmpty())
+    if (EM->isEmpty() && PM->isEmpty() && PFAIL->isEmpty() && EV->isEmpty())
         return 1;
     else
         return 0;
@@ -348,6 +358,18 @@ void MarsStation::O_WaitingEM()
         }
     }
     return;
+}
+
+void MarsStation::checkEvents()
+{
+    Event* E;
+    EV->peek(E);
+    while (E->getDay() == CurrentDay)
+    {
+        EV->dequeue(E);
+        E->Execute();
+        EV->peek(E);
+    }
 }
 
 //Law queue 3ady

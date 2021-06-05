@@ -5,6 +5,8 @@ class MarsStation
 
 private:
 	int CurrentDay;
+	LinkedQueue<Event*>* EV = new LinkedQueue<Event*>();
+
 	PriorityQueue<Rover*>* ER = new PriorityQueue<Rover*>(); //Emergency Rovers Priority Queue
 	PriorityQueue<Rover*>* PR = new PriorityQueue<Rover*>(); //Polar Rovers Priority Queue
 
@@ -26,6 +28,7 @@ public:
 
 	//setters
 	void setCurrentDay(int day);
+	void setEV(LinkedQueue<Event*>* e);
 	void setEM(PriorityQueue<Mission*>* ME);
 	void setPM(LinkedQueue<Mission*>* MP);
 	void setER(PriorityQueue<Rover*>* RE);
@@ -43,6 +46,7 @@ public:
 	PriorityQueue<Rover*>* GetER();
 	PriorityQueue<Rover*>* GetPR();
 	LinkedQueue<Rover*>* GetERCH();
+	LinkedQueue<Event*>* GetEV();
 	LinkedQueue<Rover*>* GetPRCH();
 	PriorityQueue<Rover*>* GetRIE();
 	LinkedQueue<Mission*>* GetPFAIL();
@@ -63,5 +67,5 @@ public:
 	void CheckCompleted();
 	bool isFailed(Mission* m, Rover* R);
 	void O_WaitingEM();
-
+	void checkEvents(); //distributes the events
 };

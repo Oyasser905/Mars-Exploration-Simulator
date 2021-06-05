@@ -8,7 +8,16 @@ using namespace std;
 
 class FormulationEvent: public Event
 {
+private:
+	int ID;
+	int day;
+	char type;
+	int targetLocation;
+	int duration;
+	int significance;
+	PriorityQueue<Mission*>* EM;
+	LinkedQueue<Mission*>* PM;
 public:
-	FormulationEvent();
-	void Execute(char rover_type, int event_day, int ID, int tloc, int mdur, int sig, PriorityQueue<Mission*>*& EM, LinkedQueue<Mission*>*& PM);
+	FormulationEvent(char rover_type, int event_day, int id, int tloc, int mdur, int sig, PriorityQueue<Mission*>*& EM, LinkedQueue<Mission*>*& PM);
+	void Execute();
 };
