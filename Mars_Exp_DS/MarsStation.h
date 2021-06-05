@@ -57,7 +57,8 @@ public:
 	bool NeedsCheckUp(Rover* R, char s); //If character sent is "C" it sends rover to Check-Up if needed and returns true if rover went to checkup and false if it did not need to. If character sent is "F" it immediately sends rover to checkup
 	void ReturnFromCheckUp(); //Checks if there are rovers that finished checkup and gets them back
 	void Assign_M_to_R();
-	void UI_file();
+	void UI_r();
+	void UI_w();
 	bool CheckAreWeDone(); //function to check if there are no missions to be assigned or no missions to execute, so we can exit the program, returns 0 or 1
 	void CheckCompleted();
 	bool isFailed(Mission* m, Rover* R);

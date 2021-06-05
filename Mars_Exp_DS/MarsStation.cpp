@@ -13,13 +13,17 @@ MarsStation::MarsStation()
 }
 
 //Omar Yasser
-void MarsStation::UI_file()
+void MarsStation::UI_r()
 {
     UI uiobj;
     uiobj.r_input();
-    uiobj.p_output();
 }
 
+void MarsStation::UI_w()
+{
+    UI uiobj;
+    uiobj.p_output();
+}
 //Malak
 void MarsStation::setCurrentDay(int day)
 {
