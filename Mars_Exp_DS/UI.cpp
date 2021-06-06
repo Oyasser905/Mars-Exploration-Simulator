@@ -62,7 +62,7 @@ void UI::r_input()
         while (cin.get() && !fptr.eof())
         {
             char event_type; //Event type (formulation, cancellation, promotion)
-            char rover_type; //Type of rover (mountainous, polar, emergency)
+            char mission_type; //Type of rover (mountainous, polar, emergency)
             int event_day; //Event day
             int ID; //Mission ID
             int tloc; //Target Location
@@ -77,20 +77,20 @@ void UI::r_input()
                 no_events;
 
             LinkedQueue<Event*>* EV = obj->GetEV();
-            for (int i = 0; i <= no_events; i++)
+            for (int i = 0; i < no_events; i++)
             {
-                fptr >> event_type >> rover_type >> event_day >> ID >> tloc >> mdur >> sig;
+                fptr >> event_type >> mission_type >> event_day >> ID >> tloc >> mdur >> sig;
 
                 if (event_type == 'F')
                 {
-                    Event* f = new FormulationEvent(rover_type, event_day, ID, tloc, mdur, sig);
+                    Event* f = new FormulationEvent(mission_type, event_day, ID, tloc, mdur, sig);
                     EV->enqueue(f);
                 }
             }
             obj->setEV(EV);
             for (int i = 0; i < num_er; i++)
             {
-                Rover* er = new Rover(rover_type, er_sp, er_ch, num_missions);
+                Rover* er = new Rover('E', er_sp, er_ch, num_missions);
                 er->setStatus('A');
                 er->setID(rID);
                 rID++;
@@ -98,7 +98,7 @@ void UI::r_input()
             }
             for (int i = 0; i < num_pr; i++)
             {
-                Rover* pr = new Rover(rover_type, er_sp, er_ch, num_missions);
+                Rover* pr = new Rover('P', er_sp, er_ch, num_missions);
                 pr->setStatus('A');
                 pr->setID(rID);
                 rID++;
@@ -114,6 +114,11 @@ void UI::r_input()
     {
         cout << "\nError! Unable to open input file successfully.\n\n";
     }
+}
+
+int UI::getNum_of_events()
+{
+    return no_events;
 }
 
 void UI::Interactive_mode()
@@ -164,12 +169,23 @@ void UI::w_file()
     string o_file;
     cout << "(Please include file extension)\nEnter output file name: ";
     cin >> o_file;
+    int j=obj->GetCM()->getSize();
     ofstream myfile(o_file);
     if (myfile.is_open())
     {
+        Mission* M;
         myfile << "CD\tID\tFD\tWD\tED\n";
-        myfile << "------------------------------------------\n";
-        myfile << "------------------------------------------\n";
+        for (int i = 0; i < j; i++)
+        {
+            obj->GetCM()->dequeue(M);
+            obj->GetCM()->enqueue(M,M->getCompletedDay());
+            myfile << M->getCompletedDay()<<"\t"<<M->getID()<<"\t"<<M->getDay()<<"\t"<<M->getWaitingDays()<<"\t"<<M->getExecutionDays()<<"\n";
+        }
+        for (int i = 0; i < j; i++)
+        {
+            obj->GetCM()->dequeue(M);
+            obj->GetCM()->sort_asc_enqueue(M, M->getCompletedDay());
+        }
         myfile.close();
     }
     else cout << "Unable to write to file...";

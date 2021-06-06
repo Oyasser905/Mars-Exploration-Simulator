@@ -38,4 +38,5 @@ public:
 	void w_file();
 	void p_output();
 	void chooseMode();
+	int getNum_of_events();
 };

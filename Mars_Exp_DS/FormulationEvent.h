@@ -13,6 +13,6 @@ private:
 	int duration;
 	int significance;
 public:
-	FormulationEvent(char rover_type, int event_day, int id, int tloc, int mdur, int sig);
+	FormulationEvent(char mission_type, int event_day, int id, int tloc, int mdur, int sig);
 	void Execute(Mission*& M);
 };

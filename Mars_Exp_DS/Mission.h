@@ -13,6 +13,9 @@ private:
 	int significance;
 	char status; //I : In-Execution    C: Completed    W: Waiting
 	int weight;
+	int ED;
+	int WD; 
+	int CD;
 public:
 	//constructors
 	Mission();
@@ -25,6 +28,9 @@ public:
 	void setDuration(int dur);
 	void setSignificance(int sig);
 	void setStatus(char s);
+	void setExecutionDays(int S);
+	void setWaitingDays(int W);
+	void setCompletedDay(int C);
 
 	//getters
 	int getID();
@@ -35,6 +41,9 @@ public:
 	int getSignificance();
 	char getStatus();
 	int getWeight();
+	int getExecutionDays();
+	int getWaitingDays();
+	int getCompletedDay();
 
 	//member functions
 	int calcWeight();

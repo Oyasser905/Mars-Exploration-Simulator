@@ -6,7 +6,7 @@ Mission::Mission()
 
 Mission::Mission(char t, int d, int id, int tloc, int dur, int sig)
 {
-	type = t; day = d; ID = id; targetLocation = tloc; duration = dur; significance = sig;
+	type = t; day = d; ID = id; targetLocation = tloc; duration = dur; significance = sig; WD = 0;
 }
 
 void Mission::setID(int id)
@@ -42,6 +42,21 @@ void Mission::setSignificance(int sig)
 void Mission::setStatus(char s)
 {
 	status = s;
+}
+
+void Mission::setExecutionDays(int S)
+{
+	ED = S;
+}
+
+void Mission::setWaitingDays(int W)
+{
+	WD = W;
+}
+
+void Mission::setCompletedDay(int C)
+{
+	CD = C;
 }
 
 int Mission::getID()
@@ -82,6 +97,21 @@ char Mission::getStatus()
 int Mission::getWeight()
 {
 	return weight;
+}
+
+int Mission::getExecutionDays()
+{
+	return ED;
+}
+
+int Mission::getWaitingDays()
+{
+	return WD;
+}
+
+int Mission::getCompletedDay()
+{
+	return CD;
 }
 
 

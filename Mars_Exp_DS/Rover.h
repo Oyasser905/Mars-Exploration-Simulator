@@ -20,6 +20,7 @@ public:
 	//constructors
 	Rover();
 	Rover(char t, int sp, int ch, int n);
+	static int x;
 	//setters
 	void setType(char t);
 	void setID(int id);
@@ -45,3 +46,4 @@ public:
 	int getDayToLeaveFromExecution(); //gets the day to leave from execution
 	
 };
+

@@ -166,11 +166,52 @@ PriorityQueue<Mission*>* MarsStation::GetCM()
 //Malak
 bool MarsStation::CheckAreWeDone()
 {
-    if (EM->isEmpty() && PM->isEmpty() && PFAIL->isEmpty() && EV->isEmpty())
+    if (uiobj->getNum_of_events() == CM->getSize() && CM->getSize() != 0)
         return 1;
     else
         return 0;
 }
+
+
+void MarsStation::test()
+{
+    /*Mission* M;
+    cout << "Test for polar mission\n";
+    int n = PM->getSize();
+    for (int i = 0; i < n; i++)
+    {
+        PM->dequeue(M);
+        cout <<  M->getID() << "\t";
+        PM->enqueue(M);
+    }
+    cout << "\n";*/
+    /* Mission* M;
+     cout << "Test for emergency mission\n";
+     int n = EM->getSize();
+     for (int i = 0; i < n; i++)
+     {
+         EM->dequeue(M);
+         cout << M->getID() << "\t";
+         EM->sort_asc_enqueue(M, M->calcWeight());
+     }
+     for (int i = 0; i < n; i++)
+     {
+         EM->dequeue(M);
+         EM->enqueue(M, M->calcWeight());
+     }
+     cout << "\n";*/
+    Event* M;
+    cout << "Test \n";
+    int n = EV->getSize();
+    for (int i = 0; i < n; i++)
+    {
+        EV->dequeue(M);
+        cout << M->getID() << "\t";
+        EV->enqueue(M);
+    }
+    cout << "\n";
+}
+
 
 //Malak
 bool MarsStation::NeedsCheckUp(Rover* R, char s) //checks if the rover needs checkup, if yes sends it to checkup and changes variable "no_missions_completed" to zero
@@ -289,12 +330,17 @@ void MarsStation::Assign_M_to_R()
 {
     Mission* m;
     Rover* r;
+    int v;
     while ((EM->peek(m)) && (m->getDay() <= CurrentDay) && (m->getType() == 'E') && (m->getStatus()!='I')) //assign emergency missions first //CHECK if it is not in execution
     {
         Rover* EmergencyRover = GetEmergencyRover();
         if (EmergencyRover) //if an emergency rover was available
         {
-            RIE->sort_asc_enqueue(EmergencyRover, GetED(m,'E')); //put the rover in "in-execution priority queue" but in reverse as I want mission with lowest durations days to have higher priority
+            v= GetED(m, 'E');
+            m->setWaitingDays(CurrentDay - (m->getDay()));
+            m->setExecutionDays(v);
+            RIE->sort_asc_enqueue(EmergencyRover, v); //put the rover in "in-execution priority queue" but in reverse as I want mission with lowest durations days to have higher priority
+            
             EmergencyRover->setptrToMission(m);
             EmergencyRover->setDayToLeaveFromExecution((GetED(m, 'E') + CurrentDay)); //Sets variable day to leave from execution
             EM->dequeue(m);
@@ -306,6 +352,9 @@ void MarsStation::Assign_M_to_R()
             Rover* PolarRover = GetPolarRover();
             if (PolarRover) //else if a polar rover was available
             {
+                v = GetED(m, 'P');
+                m->setWaitingDays(CurrentDay - (m->getDay()));
+                m->setExecutionDays(v);
                 RIE->sort_asc_enqueue(PolarRover, GetED(m,'P')); //put the rover in "in-execution priority queue" but in reverse as I want mission with lowest durations days to have higher priority
                 PolarRover->setptrToMission(m); 
                 PolarRover->setDayToLeaveFromExecution((GetED(m, 'P') + CurrentDay)); //Sets variable day to leave from execution
@@ -320,12 +369,15 @@ void MarsStation::Assign_M_to_R()
         }
     }
 
-    while ((PFAIL->peek(m)) && (m->getDay() == CurrentDay) && (m->getType() == 'P') && (m->getStatus()!='I'))
+    while ((PFAIL->peek(m)) && (m->getDay() <= CurrentDay) && (m->getType() == 'P') && (m->getStatus()!='I'))
     {
         Rover* PolarRover = GetPolarRover();
         if (PolarRover) //if a polar rover was available
         {
-            RIE->sort_asc_enqueue(PolarRover, GetED(m, 'P')); //put the rover in "in-execution priority queue" but in reverse as I want mission with lowest durations days to have higher priority
+            m->setWaitingDays(CurrentDay - (m->getDay()));
+            v = GetED(m, 'P');
+            m->setExecutionDays(v);
+            RIE->sort_asc_enqueue(PolarRover, v); //put the rover in "in-execution priority queue" but in reverse as I want mission with lowest durations days to have higher priority
             PolarRover->setptrToMission(m);
             PolarRover->setDayToLeaveFromExecution((GetED(m, 'P') + CurrentDay)); //Sets variable day to leave from execution
             PFAIL->dequeue(m);
@@ -338,11 +390,15 @@ void MarsStation::Assign_M_to_R()
         }
     }
 
-    while ((PM->peek(m))&& (m->getDay() == CurrentDay) && (m->getType() == 'P') && (m->getStatus()!='I')) //then assign polar missions
+    while ((PM->peek(m))&& (m->getDay() <= CurrentDay) && (m->getType() == 'P') && (m->getStatus()!='I')) //then assign polar missions
     {
         Rover* PolarRover = GetPolarRover();
         if (PolarRover) //if an emergency rover was available
         {
+
+            m->setWaitingDays(CurrentDay - (m->getDay()));
+            v = GetED(m, 'P');
+            m->setExecutionDays(v);
             RIE->sort_asc_enqueue(PolarRover, GetED(m,'P')); //put the rover in "in-execution priority queue" but in reverse as I want mission with lowest durations days to have higher priority
             PolarRover->setptrToMission(m);
             PM->dequeue(m);
@@ -507,7 +563,7 @@ void MarsStation::O_AvailableRovers()
         {
             PR->dequeue(R);
             PR->sort_asc_enqueue(R, R->getSpeed());
-            if (R->getStatus() != 'I')
+            if (R->getStatus() == 'A')
             {
                 cout << R->getID() << " ";
                 if (i < sizePR - 1)
@@ -585,7 +641,7 @@ void MarsStation::checkEvents()
     Event* E;
     Mission* M;
     EV->peek(E);
-    while (E->getDay() == CurrentDay)
+    while ((EV->peek(E)) && (E->getDay() == CurrentDay))
     {
             EV->dequeue(E);
             E->Execute(M);
@@ -598,7 +654,8 @@ void MarsStation::checkEvents()
                 PM->enqueue(M);
             }
             EV->peek(E);
-        }
+
+    }
 }
 
 //Law queue 3ady
@@ -628,6 +685,7 @@ void MarsStation::CheckCompleted()
         if (!isFailed(R->getptrToMission(),R))
         {
             R->IncrementMissionsCompleted(1);
+            (R->getptrToMission())->setCompletedDay(CurrentDay);
             (R->getptrToMission())->setStatus('C');
             ans=NeedsCheckUp(R, 'C');
             if (!ans)
@@ -642,7 +700,7 @@ void MarsStation::CheckCompleted()
                 }
             }
             M = R->getptrToMission();
-            //CM->sort_asc_enqueue(R->getptrToMission(), GetCD());
+            CM->sort_asc_enqueue(R->getptrToMission(), (R->getptrToMission())->getCompletedDay());
             delete M;
         }
 

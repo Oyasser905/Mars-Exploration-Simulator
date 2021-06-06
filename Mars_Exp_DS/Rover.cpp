@@ -5,9 +5,11 @@ Rover::Rover()
 {
 }
 
+int Rover::x = 0;
+
 Rover::Rover(char t, int sp, int ch, int n)
 {
-	R_type = t; speed = sp; checkupDuration = ch, no_check = n;
+	R_type = t; speed = sp; checkupDuration = ch, no_check = n; R_ID = x++;
 	no_missions_completed = 0; 
 	DayToLeaveCheckUp = 75073; //this number would never be used except if there was a logical error
 	ptrToMission = nullptr;

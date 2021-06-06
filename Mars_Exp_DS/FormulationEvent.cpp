@@ -4,9 +4,9 @@
 #include"priorityQueue.h"
 using namespace std;
 
-FormulationEvent::FormulationEvent(char rover_type, int event_day, int id, int tloc, int mdur, int sig)
+FormulationEvent::FormulationEvent(char mission_type, int event_day, int id, int tloc, int mdur, int sig)
 {
-    type = rover_type; setDay(event_day); setID(id); targetLocation = tloc; duration = mdur; significance = sig;
+    type = mission_type; setDay(event_day); setID(id); targetLocation = tloc; duration = mdur; significance = sig;
 }
 
 void FormulationEvent::Execute(Mission*& M)
