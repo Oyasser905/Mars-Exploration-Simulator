@@ -420,50 +420,53 @@ void MarsStation::O_InExec()
 {
     Rover* R;
     int sizeRIE = RIE->getSize();
-    if ((RIE->peek(R)) && (R->getStatus() == 'I') && R->getType() == 'E')
+    if ((RIE->peek(R)) && (R->getStatus() == 'I'))
     {
-        cout << "[ ";
-        for (int i = 0; i < sizeRIE; i++)
+        if (R->getType() == 'E')
         {
-            RIE->dequeue(R);
-            RIE->sort_asc_enqueue(R, R->getptrToMission()->calcWeight());
-            if (R->getDayToLeaveCheckUp() <= CurrentDay)
+            cout << "[ ";
+            for (int i = 0; i < sizeRIE; i++)
             {
-                cout << R->getID() << " ";
-                if (i < sizeRIE - 1)
+                RIE->dequeue(R);
+                RIE->sort_asc_enqueue(R, R->getptrToMission()->calcWeight());
+                if (R->getDayToLeaveFromExecution() <= CurrentDay)
                 {
-                    cout << ", ";
+                    cout << R->getID() << " ";
+                    if (i < sizeRIE - 1)
+                    {
+                        cout << ", ";
+                    }
                 }
             }
-        }
-        cout << "]";
-        for (int i = 0; i < sizeRIE; i++)
-        {
-            RIE->dequeue(R);
-            RIE->enqueue(R, R->getptrToMission()->calcWeight());
-        }
-    }
-    else if ((RIE->peek(R)) && (R->getStatus() == 'I') && R->getType() == 'P')
-    {
-        cout << "( ";
-        for (int i = 0; i < sizeRIE; i++)
-        {
-            RIE->dequeue(R);
-            RIE->enqueue(R, R->getptrToMission()->calcWeight());
-            if (R->getDayToLeaveCheckUp() <= CurrentDay && R->getStatus() == 'I')
+            cout << "]";
+            for (int i = 0; i < sizeRIE; i++)
             {
-                cout << R->getID() << " ";
-                if (i < sizeRIE - 1)
-                {
-                    cout << ", ";
-                }
+                RIE->dequeue(R);
+                RIE->enqueue(R, R->getptrToMission()->calcWeight());
             }
         }
-        cout << ")";
-        for (int i = 0; i < sizeRIE; i++)
+        else if (R->getType() == 'P')
         {
-            RIE->dequeue(R);
-            RIE->enqueue(R, R->getptrToMission()->calcWeight());
+            cout << "( ";
+            for (int i = 0; i < sizeRIE; i++)
+            {
+                RIE->dequeue(R);
+                RIE->enqueue(R, R->getptrToMission()->calcWeight());
+                if (R->getDayToLeaveFromExecution() <= CurrentDay)
+                {
+                    cout << R->getID() << " ";
+                    if (i < sizeRIE - 1)
+                    {
+                        cout << ", ";
+                    }
+                }
+            }
+            cout << ")";
+            for (int i = 0; i < sizeRIE; i++)
+            {
+                RIE->dequeue(R);
+                RIE->enqueue(R, R->getptrToMission()->calcWeight());
+            }
         }
     }
     return;
@@ -481,7 +484,7 @@ void MarsStation::O_AvailableRovers()
         {
             ER->dequeue(R);
             ER->sort_asc_enqueue(R, R->getSpeed());
-            if (R->getStatus() != 'I')
+            if (R->getStatus() == 'A')
             {
                 cout << R->getID() << " "; 
                 if (i < sizeER - 1)
@@ -528,14 +531,14 @@ void MarsStation::O_InCheckupRovers()
     Rover* R;
     int sizeERCH = ERCH->getSize();
     int sizePRCH = PRCH->getSize();
-    if ((ERCH->peek(R)) && (R->getStatus() == 'CH'))
+    if ((ERCH->peek(R)) && (R->getStatus() == 'U'))
     {
         cout << "[ ";
         for (int i = 0; i < sizeERCH; i++)
         {
             ERCH->dequeue(R);
             ERCH->enqueue(R);
-            if (R->getStatus() != 'I')
+            if (R->getStatus() == 'U')
             {
                 cout << R->getID() << " ";
                 if (i < sizeERCH - 1)
@@ -558,7 +561,7 @@ void MarsStation::O_InCheckupRovers()
         {
             PRCH->dequeue(R);
             PRCH->enqueue(R);
-            if (R->getStatus() != 'I')
+            if (R->getStatus() == 'U')
             {
                 cout << R->getID() << " ";
                 if (i < sizePRCH - 1)
@@ -584,18 +587,18 @@ void MarsStation::checkEvents()
     EV->peek(E);
     while (E->getDay() == CurrentDay)
     {
-        EV->dequeue(E);
-        E->Execute(M);
-        if (M->getType() == 'E')
-        {
-            EM->enqueue(M, M->calcWeight());
+            EV->dequeue(E);
+            E->Execute(M);
+            if (M->getType() == 'E')
+            {
+                EM->enqueue(M, M->calcWeight());
+            }
+            else if (M->getType() == 'P')
+            {
+                PM->enqueue(M);
+            }
+            EV->peek(E);
         }
-        else if (M->getType() == 'P')
-        {
-            PM->enqueue(M);
-        }
-        EV->peek(E);
-    }
 }
 
 //Law queue 3ady
@@ -689,20 +692,17 @@ int MarsStation::GetED(Mission* M, char rovertype) //To get the Execution Days
     if ((M->getType() == 'E') && (rovertype=='E')) //if it was an Emergency mission with an emergency rover assigned to it
     {
         ER->peek(r);
-        r->getSpeed();           
-        Day = ceil(M->getDuration() + (((M->getTargetLocation() / r->getSpeed()) / 25) * 2));    //(the days it takes to reach the target location, fulfill mission requirements, and then get back to the base station)
+        Day = ceil(M->getDuration() + (((M->getTargetLocation() / /*r->getSpeed())*/ 6) / 25) * 2));    //(the days it takes to reach the target location, fulfill mission requirements, and then get back to the base station)
     }
     else if ((M->getType() == 'E') && (rovertype == 'P')) //if it was an Emergency mission with a polar rover assigned to it
     {
         PR->peek(r);
-        r->getSpeed();
-        Day = ceil(M->getDuration() + (((M->getTargetLocation() / r->getSpeed())/25) * 2));      //(the days it takes to reach the target location, fulfill mission requirements, and then get back to the base station)
+        Day = ceil(M->getDuration() + (((M->getTargetLocation() / /*r->getSpeed())*/ 6) /25) * 2));      //(the days it takes to reach the target location, fulfill mission requirements, and then get back to the base station)
     }
     else if ((M->getType() == 'P') && (rovertype=='P')) //if it was a Polar mission it must have a polar rover
     {
         PR->peek(r);
-        r->getSpeed();            
-        Day = ceil(M->getDuration() + ((M->getTargetLocation() / r->getSpeed()) / 25)*2);      //(the days it takes to reach the target location, fulfill mission requirements, and then get back to the base station)
+        Day = ceil(M->getDuration() + ((M->getTargetLocation() / /*r->getSpeed())*/ 6) / 25)*2);      //(the days it takes to reach the target location, fulfill mission requirements, and then get back to the base station)
     }
     return Day;
 }

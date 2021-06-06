@@ -14,10 +14,12 @@ void FormulationEvent::Execute(Mission*& M)
     if (type == 'E')
     {
         M = new Mission(type, getDay(), getID(), targetLocation, duration, significance);
+        M->setStatus('N'); //Not Assigned
     }
     else if (type == 'P')
     {
         M = new Mission(type, getDay(), getID(), targetLocation, duration, significance);
+        M->setStatus('N'); //Not Assigned
     }
 }
 
