@@ -36,9 +36,19 @@ void MarsStation::UI_r()
     uiobj->r_input();
 }
 
-void MarsStation::UI_w()
+void MarsStation::chooseMode()
+{
+    uiobj->chooseMode();
+}
+
+void MarsStation::UI_p()
 {
     uiobj->p_output();
+}
+
+void MarsStation::UI_w()
+{
+    uiobj->w_file();
 }
 //Malak
 void MarsStation::setCurrentDay(int day)
@@ -387,11 +397,6 @@ void MarsStation::checkEvents()
         E->Execute();
         EV->peek(E);
     }
-}
-
-void MarsStation::chooseMode()
-{
-    uiobj->chooseMode();
 }
 
 //Law queue 3ady

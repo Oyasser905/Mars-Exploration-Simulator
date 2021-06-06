@@ -64,11 +64,13 @@ public:
 	void ReturnFromCheckUp(); //Checks if there are rovers that finished checkup and gets them back
 	void Assign_M_to_R();
 	void UI_r();
+	void chooseMode();
+	void UI_p();
 	void UI_w();
 	bool CheckAreWeDone(); //function to check if there are no missions to be assigned or no missions to execute, so we can exit the program, returns 0 or 1
 	void CheckCompleted();
 	bool isFailed(Mission* m, Rover* R);
 	void O_WaitingEM();
 	void checkEvents(); //distributes the events
-	void chooseMode();
+	
 };

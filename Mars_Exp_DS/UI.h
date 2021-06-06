@@ -35,7 +35,7 @@ public:
 	void Interactive_mode();
 	void SbS_mode();
 	void Silent_mode();
-	void w_file(string fname);
+	void w_file();
 	void p_output();
 	void chooseMode();
 };

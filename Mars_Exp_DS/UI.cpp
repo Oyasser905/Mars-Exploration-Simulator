@@ -137,11 +137,9 @@ void UI::Interactive_mode()
 
 void UI::SbS_mode()
 {
-    for (int d = 0; d < 3; d++)
-    {
         system("CLS");
         int w_m = 7, i_e = 4, a_r = 4, i_c = 2, c_m = 3;
-        cout << "Current Day: " << d << "\n";
+        cout << "Current Day: " << obj->getCurrentDay() << "\n";
         cout << w_m << " Waiting Missions: " << "[11, 13] (6, 8)\n";
         cout << "------------------------------------------\n";
         cout << a_r << " In-Execution Missions/Rovers: " << "[2/1, 10/7] (3/5)\n";
@@ -152,7 +150,6 @@ void UI::SbS_mode()
         cout << "------------------------------------------\n";
         cout << c_m << " Completed Missions: " << "(4) [1]\n\n\n";
         Sleep(1000);
-    }
 }
 
 void UI::Silent_mode()
@@ -161,9 +158,13 @@ void UI::Silent_mode()
     cout << "Silent Mode\nSimulation Starts...\nSimulation Ends, Output file created\n\n\n";
 }
 
-void UI::w_file(string fname)
+void UI::w_file()
 {
-    ofstream myfile(fname);
+    system("CLS");
+    string o_file;
+    cout << "(Please include file extension)\nEnter output file name: ";
+    cin >> o_file;
+    ofstream myfile(o_file);
     if (myfile.is_open())
     {
         myfile << "CD\tID\tFD\tWD\tED\n";
@@ -184,45 +185,32 @@ void UI::p_output()
     else if (mode == 2)
     {
         SbS_mode();
-
     }
-    else
+    else if (mode == 3)
     {
         Silent_mode();
-
     }
 }
 
 void UI::chooseMode()
 {
-    system("CLS");
-    string o_file;
-    cout << "(Please include file extension)\nEnter output file name: ";
-    cin >> o_file;
     int choice;
-    cout << "1.Interactive mode\n2.Step-by-Step mode\n3.Silent mode\n4.Exit Program\n\n";
+    cout << "1.Interactive mode\n2.Step-by-Step mode\n3.Silent mode\n\n";
     cin >> choice;
     if (choice == 1)
     {
         system("CLS");
-        w_file(o_file);
         mode = 1;
     }
     else if (choice == 2)
     {
         system("CLS");
-        w_file(o_file);
         mode = 2;
     }
     else if (choice == 3)
     {
         system("CLS");
-        w_file(o_file);
         mode = 3;
-    }
-    else if (choice == 4)
-    {
-        system("CLS");
     }
     else
     {
