@@ -228,7 +228,7 @@ void MarsStation::ReturnFromCheckUp()
     if (ERCH->peek(ERP))
     {
         //while currentday is equal to the day the first rover (in the priority queue) should leave check up then dequeue rover from checkup and enqueue it in emergency rovers priority queue
-        while((ERCH->peek(ERP))&&(CurrentDay==ERP->getDayToLeaveCheckUp()))
+        while((ERCH->peek(ERP))&&(CurrentDay == ERP->getDayToLeaveCheckUp()))
         {
             ERCH->dequeue(ERP);
             ER->enqueue(ERP, ERP->getSpeed());
@@ -356,7 +356,7 @@ void MarsStation::Assign_M_to_R()
     }
 }
 
-void MarsStation::O_WaitingEM()
+void MarsStation::O_Waiting()
 {
 
     //law awel element status W keda fih 7agaat waiting
@@ -365,24 +365,105 @@ void MarsStation::O_WaitingEM()
     //w hafdal a3mel keda le7ad 
     //int s=size;
     Mission* M;
-    int size = EM->getSize();
+    int sizeEM = EM->getSize();
+    int sizePM = PM->getSize();
     if ((EM->peek(M)) && (M->getStatus() == 'W'))
     {
         cout << "[ ";
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < sizeEM; i++)
         {
             EM->dequeue(M);
             EM->sort_asc_enqueue(M, M->calcWeight());
             if ((M->getDay() <= CurrentDay) && (M->getStatus() != 'I'))
             {
-                cout << M->getID() << " , ";
+                cout << M->getID() << " ";
+                if (i < sizeEM - 1)
+                {
+                    cout << ", ";
+                }
             }
         }
         cout << "]";
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < sizeEM; i++)
         {
             EM->dequeue(M);
             EM->enqueue(M, M->calcWeight());
+        }
+    }
+    if ((PM->peek(M)) && (M->getStatus() == 'W'))
+    {
+        cout << "( ";
+        for (int i = 0; i < sizePM; i++)
+        {
+            PM->dequeue(M);
+            PM->enqueue(M);
+            if (M->getStatus() != 'I')
+            {
+                cout << M->getID() << " ";
+                if (i < sizePM - 1)
+                {
+                    cout << ", ";
+                }
+            }
+        }
+        cout << ")";
+        for (int i = 0; i < sizePM; i++)
+        {
+            PM->dequeue(M);
+            PM->enqueue(M);
+        }
+    }
+    return;
+}
+
+void MarsStation::O_InExec()
+{
+    Rover* R;
+    int sizeRIE = RIE->getSize();
+    if ((RIE->peek(R)) && (R->getStatus() == 'I') && R->getType() == 'E')
+    {
+        cout << "[ ";
+        for (int i = 0; i < sizeRIE; i++)
+        {
+            RIE->dequeue(R);
+            RIE->sort_asc_enqueue(R, R->getptrToMission()->calcWeight());
+            if (R->getDayToLeaveCheckUp() <= CurrentDay)
+            {
+                cout << R->getID() << " ";
+                if (i < sizeRIE - 1)
+                {
+                    cout << ", ";
+                }
+            }
+        }
+        cout << "]";
+        for (int i = 0; i < sizeRIE; i++)
+        {
+            RIE->dequeue(R);
+            RIE->enqueue(R, R->getptrToMission()->calcWeight());
+        }
+    }
+    else if ((RIE->peek(R)) && (R->getStatus() == 'I') && R->getType() == 'P')
+    {
+        cout << "( ";
+        for (int i = 0; i < sizeRIE; i++)
+        {
+            RIE->dequeue(R);
+            RIE->enqueue(R, R->getptrToMission()->calcWeight());
+            if (R->getDayToLeaveCheckUp() <= CurrentDay && R->getStatus() == 'I')
+            {
+                cout << R->getID() << " ";
+                if (i < sizeRIE - 1)
+                {
+                    cout << ", ";
+                }
+            }
+        }
+        cout << ")";
+        for (int i = 0; i < sizeRIE; i++)
+        {
+            RIE->dequeue(R);
+            RIE->enqueue(R, R->getptrToMission()->calcWeight());
         }
     }
     return;
@@ -402,7 +483,11 @@ void MarsStation::O_AvailableRovers()
             ER->sort_asc_enqueue(R, R->getSpeed());
             if (R->getStatus() != 'I')
             {
-                cout << R->getID() << " , ";
+                cout << R->getID() << " "; 
+                if (i < sizeER - 1)
+                {
+                    cout << ", ";
+                }
             }
         }
         cout << "]";
@@ -421,7 +506,11 @@ void MarsStation::O_AvailableRovers()
             PR->sort_asc_enqueue(R, R->getSpeed());
             if (R->getStatus() != 'I')
             {
-                cout << R->getID() << " , ";
+                cout << R->getID() << " ";
+                if (i < sizePR - 1)
+                {
+                    cout << ", ";
+                }
             }
         }
         cout << ")";
@@ -437,44 +526,52 @@ void MarsStation::O_AvailableRovers()
 void MarsStation::O_InCheckupRovers()
 {
     Rover* R;
-    int sizeER = ER->getSize();
-    int sizePR = PR->getSize();
-    if ((ER->peek(R)) && (R->getStatus() == 'CH'))
+    int sizeERCH = ERCH->getSize();
+    int sizePRCH = PRCH->getSize();
+    if ((ERCH->peek(R)) && (R->getStatus() == 'CH'))
     {
         cout << "[ ";
-        for (int i = 0; i < sizeER; i++)
+        for (int i = 0; i < sizeERCH; i++)
         {
-            ER->dequeue(R);
-            ER->sort_asc_enqueue(R, R->getSpeed());
+            ERCH->dequeue(R);
+            ERCH->enqueue(R);
             if (R->getStatus() != 'I')
             {
-                cout << R->getID() << " , ";
+                cout << R->getID() << " ";
+                if (i < sizeERCH - 1)
+                {
+                    cout << ", ";
+                }
             }
         }
         cout << "]";
-        for (int i = 0; i < sizeER; i++)
+        for (int i = 0; i < sizeERCH; i++)
         {
-            ER->dequeue(R);
-            ER->enqueue(R, R->getSpeed());
+            ERCH->dequeue(R);
+            ERCH->enqueue(R);
         }
     }
-    if ((PR->peek(R)) && (R->getStatus() == 'CH'))
+    if ((PRCH->peek(R)) && (R->getStatus() == 'CH'))
     {
         cout << "( ";
-        for (int i = 0; i < sizePR; i++)
+        for (int i = 0; i < sizePRCH; i++)
         {
-            PR->dequeue(R);
-            PR->sort_asc_enqueue(R, R->getSpeed());
+            PRCH->dequeue(R);
+            PRCH->enqueue(R);
             if (R->getStatus() != 'I')
             {
-                cout << R->getID() << " , ";
+                cout << R->getID() << " ";
+                if (i < sizePRCH - 1)
+                {
+                    cout << ", ";
+                }
             }
         }
         cout << ")";
-        for (int i = 0; i < sizePR; i++)
+        for (int i = 0; i < sizePRCH; i++)
         {
-            PR->dequeue(R);
-            PR->enqueue(R, R->getSpeed());
+            PRCH->dequeue(R);
+            PRCH->enqueue(R);
         }
     }
     return;

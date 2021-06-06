@@ -70,7 +70,8 @@ public:
 	bool CheckAreWeDone(); //function to check if there are no missions to be assigned or no missions to execute, so we can exit the program, returns 0 or 1
 	void CheckCompleted();
 	bool isFailed(Mission* m, Rover* R);
-	void O_WaitingEM();
+	void O_Waiting();
+	void O_InExec();
 	void O_AvailableRovers();
 	void O_InCheckupRovers();
 	void checkEvents(); //distributes the events

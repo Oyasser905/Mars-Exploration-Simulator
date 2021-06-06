@@ -123,9 +123,9 @@ void UI::Interactive_mode()
     system("CLS");
     cout << "Current Day: " << obj->getCurrentDay() << "\n";
     int w_m = 7, i_e = 4, a_r = 4, i_c = 2, c_m = 3;
-    cout << w_m << " Waiting Missions: "; obj->O_WaitingEM(); cout << "\n";
+    cout << w_m << " Waiting Missions: "; obj->O_Waiting(); cout << "\n";
     cout << "------------------------------------------\n";
-    cout << a_r << " In-Execution Missions/Rovers: " << "\n";
+    cout << a_r << " In-Execution Missions/Rovers: "; obj->O_InExec(); cout << "\n";
     cout << "------------------------------------------\n";
     cout << w_m << " Available Rovers: "; obj->O_AvailableRovers(); cout << "\n";
     cout << "------------------------------------------\n";
@@ -140,9 +140,9 @@ void UI::SbS_mode()
         system("CLS");
         int w_m = 7, i_e = 4, a_r = 4, i_c = 2, c_m = 3;
         cout << "Current Day: " << obj->getCurrentDay() << "\n";
-        cout << w_m << " Waiting Missions: "; obj->O_WaitingEM(); cout << "\n";
+        cout << w_m << " Waiting Missions: "; obj->O_Waiting(); cout << "\n";
         cout << "------------------------------------------\n";
-        cout << a_r << " In-Execution Missions/Rovers: " << "\n";
+        cout << a_r << " In-Execution Missions/Rovers: "; obj->O_InExec(); cout << "\n";
         cout << "------------------------------------------\n";
         cout << w_m << " Available Rovers: "; obj->O_AvailableRovers(); cout << "\n";
         cout << "------------------------------------------\n";
