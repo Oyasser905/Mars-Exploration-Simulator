@@ -76,8 +76,6 @@ void UI::r_input()
                 num_missions >> pr_ch >> er_ch >>
                 no_events;
 
-            PriorityQueue<Mission*>*  EM;
-            LinkedQueue<Mission*>*  PM;
             LinkedQueue<Event*>* EV = obj->GetEV();
             for (int i = 0; i <= no_events; i++)
             {
@@ -85,9 +83,7 @@ void UI::r_input()
 
                 if (event_type == 'F')
                 {
-                    EM = obj->GetEM();
-                    PM = obj->GetPM();
-                    Event* f = new FormulationEvent(rover_type, event_day, ID, tloc, mdur, sig, EM, PM);
+                    Event* f = new FormulationEvent(rover_type, event_day, ID, tloc, mdur, sig);
                     EV->enqueue(f);
                 }
             }

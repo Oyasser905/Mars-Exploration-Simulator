@@ -4,23 +4,20 @@
 #include"priorityQueue.h"
 using namespace std;
 
-FormulationEvent::FormulationEvent(char rover_type, int event_day, int id, int tloc, int mdur, int sig, PriorityQueue<Mission*>*& EM, LinkedQueue<Mission*>*& PM)
+FormulationEvent::FormulationEvent(char rover_type, int event_day, int id, int tloc, int mdur, int sig)
 {
     type = rover_type; setDay(event_day); setID(id); targetLocation = tloc; duration = mdur; significance = sig;
 }
 
-void FormulationEvent::Execute()
+void FormulationEvent::Execute(Mission*& M)
 {
     if (type == 'E')
     {
-        Mission* em = new Mission(type, getDay(), getID(), targetLocation, duration, significance);
-        int w = em->calcWeight();
-        EM->enqueue(em, w);
+        M = new Mission(type, getDay(), getID(), targetLocation, duration, significance);
     }
     else if (type == 'P')
     {
-        Mission* pm = new Mission(type, getDay(), getID(), targetLocation, duration, significance);
-        PM->enqueue(pm);
+        M = new Mission(type, getDay(), getID(), targetLocation, duration, significance);
     }
 }
 

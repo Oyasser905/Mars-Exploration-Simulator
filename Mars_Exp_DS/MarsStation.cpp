@@ -483,11 +483,20 @@ void MarsStation::O_InCheckupRovers()
 void MarsStation::checkEvents()
 {
     Event* E;
+    Mission* M;
     EV->peek(E);
     while (E->getDay() == CurrentDay)
     {
         EV->dequeue(E);
-        E->Execute();
+        E->Execute(M);
+        if (M->getType() == 'E')
+        {
+            EM->enqueue(M, M->calcWeight());
+        }
+        else if (M->getType() == 'P')
+        {
+            PM->enqueue(M);
+        }
         EV->peek(E);
     }
 }
