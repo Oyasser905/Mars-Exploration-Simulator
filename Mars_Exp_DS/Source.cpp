@@ -26,11 +26,11 @@ int main()
     {
         mars.checkEvents();
         mars.UI_p();
-        mars.setCurrentDay(currentday);
         mars.CheckCompleted();
         mars.ReturnFromCheckUp(); //returns rovers that have completed check up as some could have high speeds and hence higher priority
         mars.Assign_M_to_R();
         currentday++;
+        mars.setCurrentDay(currentday);
     }
     mars.UI_w();
 }

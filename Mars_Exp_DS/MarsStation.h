@@ -56,7 +56,7 @@ public:
 	Rover* GetEmergencyRover();
 	Rover* GetPolarRover();
 	int GetED(Mission* M, char c); //To get the Execution Days 
-	//int GetCD(PriorityQueue<Mission*>* m, Mission M, PriorityQueue<Rover*>* ER, PriorityQueue<Rover*>* PR, FormulationEvent e); To get the Completion Day
+	//int GetCD(Mission* M, char rovertype); //To get the Completion Day
 	//int getCompletedMissions();
 
 	//functions
@@ -71,6 +71,8 @@ public:
 	void CheckCompleted();
 	bool isFailed(Mission* m, Rover* R);
 	void O_WaitingEM();
+	void O_AvailableRovers();
+	void O_InCheckupRovers();
 	void checkEvents(); //distributes the events
 	
 };

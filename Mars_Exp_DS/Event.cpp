@@ -3,6 +3,16 @@
 #include"priorityQueue.h"
 
 
+void Event::setDay(int day)
+{
+	eventDay = day;
+}
+
+void Event::setID(int id)
+{
+	missionID = id;
+}
+
 int Event::getDay() const
 {
 	return eventDay;

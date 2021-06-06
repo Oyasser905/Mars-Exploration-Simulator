@@ -23,7 +23,7 @@ class UI
 	int num_missions; //No. of missions before check up
 	int pr_ch; //Polar check up duration
 	int er_ch; //Emergency check up duration
-
+	int rID = 1; //Rover ID
 	int no_events; //No. of events
 	int mode;
 	MarsStation* obj;

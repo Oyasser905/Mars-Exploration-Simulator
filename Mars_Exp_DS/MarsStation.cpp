@@ -32,7 +32,6 @@ MarsStation::MarsStation()
 //Omar Yasser
 void MarsStation::UI_r()
 {
-    
     uiobj->r_input();
 }
 
@@ -50,6 +49,7 @@ void MarsStation::UI_w()
 {
     uiobj->w_file();
 }
+
 //Malak
 void MarsStation::setCurrentDay(int day)
 {
@@ -288,6 +288,7 @@ Rover* MarsStation::GetPolarRover() //returns polar rovers that have completed c
 void MarsStation::Assign_M_to_R()
 {
     Mission* m;
+    Rover* r;
     while ((EM->peek(m)) && (m->getDay() <= CurrentDay) && (m->getType() == 'E') && (m->getStatus()!='I')) //assign emergency missions first //CHECK if it is not in execution
     {
         Rover* EmergencyRover = GetEmergencyRover();
@@ -310,7 +311,7 @@ void MarsStation::Assign_M_to_R()
                 PolarRover->setDayToLeaveFromExecution((GetED(m, 'P') + CurrentDay)); //Sets variable day to leave from execution
                 EM->dequeue(m);
                 m->setStatus('I');
-                EM->enqueue(m, m->calcWeight());
+                EM->enqueue(m, m->calcWeight()); 
             }
             else //mark as waiting
             {
@@ -382,6 +383,98 @@ void MarsStation::O_WaitingEM()
         {
             EM->dequeue(M);
             EM->enqueue(M, M->calcWeight());
+        }
+    }
+    return;
+}
+
+void MarsStation::O_AvailableRovers()
+{
+    Rover* R;
+    int sizeER = ER->getSize();
+    int sizePR = PR->getSize();
+    if ((ER->peek(R)) && (R->getStatus() == 'A'))
+    {
+        cout << "[ ";
+        for (int i = 0; i < sizeER; i++)
+        {
+            ER->dequeue(R);
+            ER->sort_asc_enqueue(R, R->getSpeed());
+            if (R->getStatus() != 'I')
+            {
+                cout << R->getID() << " , ";
+            }
+        }
+        cout << "]";
+        for (int i = 0; i < sizeER; i++)
+        {
+            ER->dequeue(R);
+            ER->enqueue(R, R->getSpeed());
+        }
+    }
+    if ((PR->peek(R)) && (R->getStatus() == 'A'))
+    {
+        cout << "( ";
+        for (int i = 0; i < sizePR; i++)
+        {
+            PR->dequeue(R);
+            PR->sort_asc_enqueue(R, R->getSpeed());
+            if (R->getStatus() != 'I')
+            {
+                cout << R->getID() << " , ";
+            }
+        }
+        cout << ")";
+        for (int i = 0; i < sizePR; i++)
+        {
+            PR->dequeue(R);
+            PR->enqueue(R, R->getSpeed());
+        }
+    }
+    return;
+}
+
+void MarsStation::O_InCheckupRovers()
+{
+    Rover* R;
+    int sizeER = ER->getSize();
+    int sizePR = PR->getSize();
+    if ((ER->peek(R)) && (R->getStatus() == 'CH'))
+    {
+        cout << "[ ";
+        for (int i = 0; i < sizeER; i++)
+        {
+            ER->dequeue(R);
+            ER->sort_asc_enqueue(R, R->getSpeed());
+            if (R->getStatus() != 'I')
+            {
+                cout << R->getID() << " , ";
+            }
+        }
+        cout << "]";
+        for (int i = 0; i < sizeER; i++)
+        {
+            ER->dequeue(R);
+            ER->enqueue(R, R->getSpeed());
+        }
+    }
+    if ((PR->peek(R)) && (R->getStatus() == 'CH'))
+    {
+        cout << "( ";
+        for (int i = 0; i < sizePR; i++)
+        {
+            PR->dequeue(R);
+            PR->sort_asc_enqueue(R, R->getSpeed());
+            if (R->getStatus() != 'I')
+            {
+                cout << R->getID() << " , ";
+            }
+        }
+        cout << ")";
+        for (int i = 0; i < sizePR; i++)
+        {
+            PR->dequeue(R);
+            PR->enqueue(R, R->getSpeed());
         }
     }
     return;
@@ -474,28 +567,6 @@ bool MarsStation::isFailed(Mission* M, Rover* R)
         return false;
 }
 
-
-
-
-
-//Omar AbdelAzeem
-//int MarsStation::getCompletedMission()
-//{
-   // Mission* m2;
-    //while (->dequeue(m2))
-   // {
-      //  CM->sort_asc_enqueue(m2, m2->getWeight()); //send days taken to complete missions NOT getWeight() as getweight is made to determine priority of emergency missions
-   // }
-   // return CM->getSize();
-//}
-
-//Omar AbdelAzeem
-//int MarsStation::GetFD() //To get the Formulation Day
-//{
-  //  FormulationEvent e;
-    //return e.getDay();
-//}
-
 //int MarsStation::GetWD(PriorityQueue<Mission*>* m) //To get the Waiting Days
 //{
 
@@ -530,11 +601,10 @@ int MarsStation::GetED(Mission* M, char rovertype) //To get the Execution Days
     return Day;
 }
 
-//Omar AbdelAzeem
-//int MarsStation::GetCD(PriorityQueue<Mission*>* m, Mission M, PriorityQueue<Rover*>* ER, PriorityQueue<Rover*>* PR, FormulationEvent e) //To get the Completion Day
+////Omar AbdelAzeem
+//int MarsStation::GetCD(Mission* M, char rovertype) //To get the Completion Day
 //{
-  //  int CD;
-    //CD = /*GetWD(m)*/ +GetED(M, ER, PR) + GetFD(); //CD = FD + WD + ED
-    //return CD;
+//    int CD = /*GetWD(m)*/ + GetED(M, rovertype) + M->getDay(); //CD = FD + WD + ED
+//    return CD;
 //}
 

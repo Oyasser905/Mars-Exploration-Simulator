@@ -7,6 +7,7 @@ class Rover
 {
 private:
 	char R_type;
+	int R_ID;
 	int speed;
 	int checkupDuration;
 	char R_status;
@@ -21,6 +22,7 @@ public:
 	Rover(char t, int sp, int ch, int n);
 	//setters
 	void setType(char t);
+	void setID(int id);
 	void setSpeed(int s);
 	void setCheckupDuration(int ch);
 	void setStatus(char s);
@@ -32,6 +34,7 @@ public:
 
 	//getters
 	char getType();
+	int getID();
 	int getSpeed();
 	int getCheckupDuration();
 	char getStatus();

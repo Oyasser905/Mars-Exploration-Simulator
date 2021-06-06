@@ -19,6 +19,11 @@ void Rover::setType(char t)
 	R_type = t;
 }
 
+void Rover::setID(int id)
+{
+	R_ID = id;
+}
+
 void Rover::setSpeed(int s)
 {
 	speed = s;
@@ -66,6 +71,11 @@ void Rover::setDayToLeaveFromExecution(int d)
 char Rover::getType()
 {
 	return R_type;
+}
+
+int Rover::getID()
+{
+	return R_ID;
 }
 
 int Rover::getSpeed()

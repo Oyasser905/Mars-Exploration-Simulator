@@ -3,14 +3,11 @@
 #include"Mission.h"
 #include"priorityQueue.h"
 #include "Queue.h"
-#include<iostream>
 using namespace std;
 
 class FormulationEvent: public Event
 {
 private:
-	int ID;
-	int day;
 	char type;
 	int targetLocation;
 	int duration;

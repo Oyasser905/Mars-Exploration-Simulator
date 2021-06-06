@@ -85,9 +85,9 @@ void UI::r_input()
 
                 if (event_type == 'F')
                 {
-                    Event* f = new FormulationEvent(rover_type, event_day, ID, tloc, mdur, sig, EM, PM);
                     EM = obj->GetEM();
                     PM = obj->GetPM();
+                    Event* f = new FormulationEvent(rover_type, event_day, ID, tloc, mdur, sig, EM, PM);
                     EV->enqueue(f);
                 }
             }
@@ -95,15 +95,19 @@ void UI::r_input()
             for (int i = 0; i < num_er; i++)
             {
                 Rover* er = new Rover(rover_type, er_sp, er_ch, num_missions);
-                
+                er->setStatus('A');
+                er->setID(rID);
+                rID++;
                 obj->GetER()->enqueue(er, er_sp);
             }
             for (int i = 0; i < num_pr; i++)
             {
                 Rover* pr = new Rover(rover_type, er_sp, er_ch, num_missions);
+                pr->setStatus('A');
+                pr->setID(rID);
+                rID++;
                 obj->GetPR()->enqueue(pr, pr_sp);
             }
-            //Assign_M_to_R(EM, PM, ER, PR, WL);
         }
         fptr.close();
         system("CLS");
@@ -123,15 +127,15 @@ void UI::Interactive_mode()
     system("CLS");
     cout << "Current Day: " << obj->getCurrentDay() << "\n";
     int w_m = 7, i_e = 4, a_r = 4, i_c = 2, c_m = 3;
-    cout << w_m << " Waiting Missions: " << "[11, 13] (6, 8)\n";
+    cout << w_m << " Waiting Missions: "; obj->O_WaitingEM(); cout << "\n";
     cout << "------------------------------------------\n";
-    cout << a_r << " In-Execution Missions/Rovers: " << "[2/1, 10/7] (3/5)\n";
+    cout << a_r << " In-Execution Missions/Rovers: " << "\n";
     cout << "------------------------------------------\n";
-    cout << w_m << " Available Rovers: " << "[4, 6] (10)\n";
+    cout << w_m << " Available Rovers: "; obj->O_AvailableRovers(); cout << "\n";
     cout << "------------------------------------------\n";
-    cout << i_c << " In-Checkup Rovers: " << "[2] (3)\n";
+    cout << i_c << " In-Checkup Rovers: "; obj->O_InCheckupRovers(); cout << "\n";
     cout << "------------------------------------------\n";
-    cout << c_m << " Completed Missions: " << "(4) [1]\n\n\n";
+    cout << c_m << " Completed Missions: "; obj->CheckCompleted(); cout << "\n\n\n";
     
 }
 
@@ -140,15 +144,15 @@ void UI::SbS_mode()
         system("CLS");
         int w_m = 7, i_e = 4, a_r = 4, i_c = 2, c_m = 3;
         cout << "Current Day: " << obj->getCurrentDay() << "\n";
-        cout << w_m << " Waiting Missions: " << "[11, 13] (6, 8)\n";
+        cout << w_m << " Waiting Missions: "; obj->O_WaitingEM(); cout << "\n";
         cout << "------------------------------------------\n";
-        cout << a_r << " In-Execution Missions/Rovers: " << "[2/1, 10/7] (3/5)\n";
+        cout << a_r << " In-Execution Missions/Rovers: " << "\n";
         cout << "------------------------------------------\n";
-        cout << w_m << " Available Rovers: " << "[4, 6] (10)\n";
+        cout << w_m << " Available Rovers: "; obj->O_AvailableRovers(); cout << "\n";
         cout << "------------------------------------------\n";
-        cout << i_c << " In-Checkup Rovers: " << "[2] (3)\n";
+        cout << i_c << " In-Checkup Rovers: "; obj->O_InCheckupRovers(); cout << "\n";
         cout << "------------------------------------------\n";
-        cout << c_m << " Completed Missions: " << "(4) [1]\n\n\n";
+        cout << c_m << " Completed Missions: "; obj->CheckCompleted(); cout << "\n\n\n";
         Sleep(1000);
 }
 
