@@ -68,7 +68,6 @@ void UI::r_input()
             int tloc; //Target Location
             int mdur; //Mission Duration
             int sig; //Mission Significance
-
             //Read input in variables
             fptr >>
                 num_pr >> num_er >>
@@ -88,20 +87,20 @@ void UI::r_input()
                 }
             }
             obj->setEV(EV);
+            int k;
             for (int i = 0; i < num_er; i++)
             {
-                Rover* er = new Rover('E', er_sp, er_ch, num_missions);
+                Rover* er = new Rover('E', er_sp, er_ch, num_missions, i);
                 er->setStatus('A');
-                er->setID(rID);
-                rID++;
                 obj->GetER()->enqueue(er, er_sp);
+                if (i == num_er - 1)
+                    k = i+1;
+
             }
             for (int i = 0; i < num_pr; i++)
             {
-                Rover* pr = new Rover('P', er_sp, er_ch, num_missions);
+                Rover* pr = new Rover('P', er_sp, er_ch, num_missions, k+i);
                 pr->setStatus('A');
-                pr->setID(rID);
-                rID++;
                 obj->GetPR()->enqueue(pr, pr_sp);
             }
         }

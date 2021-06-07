@@ -7,7 +7,7 @@ class Rover
 {
 private:
 	char R_type;
-	int R_ID;
+	int RID=0;
 	int speed;
 	int checkupDuration;
 	char R_status;
@@ -19,8 +19,8 @@ private:
 public:
 	//constructors
 	Rover();
-	Rover(char t, int sp, int ch, int n);
-	static int x;
+	Rover(char t, int sp, int ch, int n, int ID);
+
 	//setters
 	void setType(char t);
 	void setID(int id);
@@ -35,7 +35,7 @@ public:
 
 	//getters
 	char getType();
-	int getID();
+	int GetID();
 	int getSpeed();
 	int getCheckupDuration();
 	char getStatus();
@@ -45,5 +45,7 @@ public:
 	Mission* getptrToMission(); //gets pointer to mission a rover is executing
 	int getDayToLeaveFromExecution(); //gets the day to leave from execution
 	
+	//fn
+
 };
 

@@ -5,11 +5,10 @@ Rover::Rover()
 {
 }
 
-int Rover::x = 0;
 
-Rover::Rover(char t, int sp, int ch, int n)
+Rover::Rover(char t, int sp, int ch, int n, int ID)
 {
-	R_type = t; speed = sp; checkupDuration = ch, no_check = n; R_ID = x++;
+	R_type = t; speed = sp; checkupDuration = ch, no_check = n; RID = ID;
 	no_missions_completed = 0; 
 	DayToLeaveCheckUp = 75073; //this number would never be used except if there was a logical error
 	ptrToMission = nullptr;
@@ -23,7 +22,7 @@ void Rover::setType(char t)
 
 void Rover::setID(int id)
 {
-	R_ID = id;
+	RID = id;
 }
 
 void Rover::setSpeed(int s)
@@ -75,9 +74,9 @@ char Rover::getType()
 	return R_type;
 }
 
-int Rover::getID()
+int Rover::GetID()
 {
-	return R_ID;
+	return RID;
 }
 
 int Rover::getSpeed()
@@ -119,5 +118,7 @@ int Rover::getDayToLeaveFromExecution()
 {
 	return DayToLeaveExecution;
 }
+
+
 
 

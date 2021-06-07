@@ -30,6 +30,7 @@ public:
 
 	//setters
 	void setCurrentDay(int day);
+	void SetRoverIDs();
 	void setEV(LinkedQueue<Event*>* e);
 	void setEM(PriorityQueue<Mission*>* ME);
 	void setPM(LinkedQueue<Mission*>* MP);

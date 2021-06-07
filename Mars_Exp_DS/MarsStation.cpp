@@ -56,6 +56,44 @@ void MarsStation::setCurrentDay(int day)
     CurrentDay = day;
 }
 
+void MarsStation::SetRoverIDs()
+{
+    int ID = 1;
+    int j=PR->getSize();
+    Rover* R;
+    if (PR->peek(R))
+    {
+        for (int i = 0; i < j; i++)
+        {
+            PR->dequeue(R);
+            R->setID(ID);
+            ID++;
+            PR->sort_asc_enqueue(R, R->getSpeed());
+        }
+        for (int i = 0; i < j; i++)
+        {
+            PR->dequeue(R);
+            PR->enqueue(R, R->getSpeed());
+        }
+    }
+    j= ER->getSize();
+    if (ER->peek(R))
+    {
+        for (int i = 0; i < j; i++)
+        {
+            ER->dequeue(R);
+            R->setID(ID);
+            ID++;
+            ER->sort_asc_enqueue(R, R->getSpeed());
+        }
+        for (int i = 0; i < j; i++)
+        {
+            ER->dequeue(R);
+            ER->enqueue(R, R->getSpeed());
+        }
+    }
+}
+
 void MarsStation::setEV(LinkedQueue<Event*>* e)
 {
 
@@ -225,6 +263,7 @@ bool MarsStation::NeedsCheckUp(Rover* R, char s) //checks if the rover needs che
             {
                 ERCH->enqueue(R);
                 R->setDayToLeaveCheckup((R->getCheckupDuration()) + CurrentDay); //sets variable DayToLeaveCheckup
+                R->setStatus('U');
                 R->IncrementMissionsCompleted(0);
                 return 1;
             }
@@ -235,6 +274,7 @@ bool MarsStation::NeedsCheckUp(Rover* R, char s) //checks if the rover needs che
             {
                 PRCH->enqueue(R);
                 R->setDayToLeaveCheckup((R->getCheckupDuration()) + CurrentDay); //sets variable DayToLeaveCheckUp
+                R->setStatus('U');
                 R->IncrementMissionsCompleted(0);
                 return 1;
             }
@@ -247,6 +287,7 @@ bool MarsStation::NeedsCheckUp(Rover* R, char s) //checks if the rover needs che
             ERCH->enqueue(R);
             R->setDayToLeaveCheckup((R->getCheckupDuration()) + CurrentDay); //sets variable DayToLeaveCheckUp
             R->IncrementMissionsCompleted(0);
+            R->setStatus('U');
             return 1;
         }
         else if (R->getType() == 'P')
@@ -254,6 +295,7 @@ bool MarsStation::NeedsCheckUp(Rover* R, char s) //checks if the rover needs che
             PRCH->enqueue(R);
             R->setDayToLeaveCheckup((R->getCheckupDuration()) + CurrentDay); //sets variable DayToLeaveCheckUp
             R->IncrementMissionsCompleted(0);
+            R->setStatus('U');
             return 1;
         }
     }
@@ -272,6 +314,7 @@ void MarsStation::ReturnFromCheckUp()
         while((ERCH->peek(ERP))&&(CurrentDay == ERP->getDayToLeaveCheckUp()))
         {
             ERCH->dequeue(ERP);
+            ERP->setStatus('A');
             ER->enqueue(ERP, ERP->getSpeed());
         }
     }
@@ -281,11 +324,13 @@ void MarsStation::ReturnFromCheckUp()
         while ((PRCH->peek(PRP)) && (CurrentDay == PRP->getDayToLeaveCheckUp()))
         {
             PRCH->dequeue(PRP);
+            PRP->setStatus('A');
             PR->enqueue(PRP, PRP->getSpeed());
         }
     }
     return;
 }
+
 
 //Malak
 Rover* MarsStation::GetEmergencyRover()
@@ -331,7 +376,7 @@ void MarsStation::Assign_M_to_R()
     Mission* m;
     Rover* r;
     int v;
-    while ((EM->peek(m)) && (m->getDay() <= CurrentDay) && (m->getType() == 'E') && (m->getStatus()!='I')) //assign emergency missions first //CHECK if it is not in execution
+    while ((EM->peek(m)) && (m->getType() == 'E') && (m->getStatus()!='I')) //assign emergency missions first
     {
         Rover* EmergencyRover = GetEmergencyRover();
         if (EmergencyRover) //if an emergency rover was available
@@ -339,13 +384,14 @@ void MarsStation::Assign_M_to_R()
             v= GetED(m, 'E');
             m->setWaitingDays(CurrentDay - (m->getDay()));
             m->setExecutionDays(v);
-            RIE->sort_asc_enqueue(EmergencyRover, v); //put the rover in "in-execution priority queue" but in reverse as I want mission with lowest durations days to have higher priority
-            
-            EmergencyRover->setptrToMission(m);
-            EmergencyRover->setDayToLeaveFromExecution((GetED(m, 'E') + CurrentDay)); //Sets variable day to leave from execution
             EM->dequeue(m);
             m->setStatus('I');
             EM->enqueue(m, m->calcWeight());
+            EmergencyRover->setStatus('I');
+            EmergencyRover->setDayToLeaveFromExecution((GetED(m, 'E') + CurrentDay)); //Sets variable day to leave from execution
+            EmergencyRover->setptrToMission(m);
+            RIE->sort_asc_enqueue(EmergencyRover, v); //put the rover in "in-execution priority queue" but in reverse as I want mission with lowest durations days to have higher priority
+            
         }
         else
         {
@@ -355,12 +401,14 @@ void MarsStation::Assign_M_to_R()
                 v = GetED(m, 'P');
                 m->setWaitingDays(CurrentDay - (m->getDay()));
                 m->setExecutionDays(v);
-                RIE->sort_asc_enqueue(PolarRover, GetED(m,'P')); //put the rover in "in-execution priority queue" but in reverse as I want mission with lowest durations days to have higher priority
-                PolarRover->setptrToMission(m); 
-                PolarRover->setDayToLeaveFromExecution((GetED(m, 'P') + CurrentDay)); //Sets variable day to leave from execution
                 EM->dequeue(m);
                 m->setStatus('I');
-                EM->enqueue(m, m->calcWeight()); 
+                EM->enqueue(m, m->calcWeight());
+                PolarRover->setptrToMission(m);
+                PolarRover->setDayToLeaveFromExecution((GetED(m, 'P') + CurrentDay)); //Sets variable day to leave from execution
+                PolarRover->setStatus('I');
+                RIE->sort_asc_enqueue(PolarRover, GetED(m,'P')); //put the rover in "in-execution priority queue" but in reverse as I want mission with lowest durations days to have higher priority
+          
             }
             else //mark as waiting
             {
@@ -380,6 +428,7 @@ void MarsStation::Assign_M_to_R()
             RIE->sort_asc_enqueue(PolarRover, v); //put the rover in "in-execution priority queue" but in reverse as I want mission with lowest durations days to have higher priority
             PolarRover->setptrToMission(m);
             PolarRover->setDayToLeaveFromExecution((GetED(m, 'P') + CurrentDay)); //Sets variable day to leave from execution
+            PolarRover->setStatus('I');
             PFAIL->dequeue(m);
             m->setStatus('I');
             PFAIL->enqueue(m); //Since failed polar missions are in a queue and I want in-execution missions to be at the end I will dequeue and enqueue again
@@ -401,6 +450,7 @@ void MarsStation::Assign_M_to_R()
             m->setExecutionDays(v);
             RIE->sort_asc_enqueue(PolarRover, GetED(m,'P')); //put the rover in "in-execution priority queue" but in reverse as I want mission with lowest durations days to have higher priority
             PolarRover->setptrToMission(m);
+            PolarRover->setStatus('I');
             PM->dequeue(m);
             m->setStatus('I');
             PM->enqueue(m); //Since polar missions are in a queue and I want in-execution missions to be at the end I will dequeue and enqueue again
@@ -423,49 +473,55 @@ void MarsStation::O_Waiting()
     Mission* M;
     int sizeEM = EM->getSize();
     int sizePM = PM->getSize();
+    int sizeEW = 0;
+    int sizePW = 0;
     if ((EM->peek(M)) && (M->getStatus() == 'W'))
     {
-        cout << "[ ";
-        for (int i = 0; i < sizeEM; i++)
+        PriorityQueue<Mission*>* temp = new PriorityQueue<Mission*>();
+        while(!EM->isEmpty())
         {
             EM->dequeue(M);
-            EM->sort_asc_enqueue(M, M->calcWeight());
-            if ((M->getDay() <= CurrentDay) && (M->getStatus() != 'I'))
+            temp->enqueue(M, M->calcWeight());
+            if ((sizeEW == 0)&&(M->getStatus() != 'I'))
             {
-                cout << M->getID() << " ";
-                if (i < sizeEM - 1)
-                {
-                    cout << ", ";
-                }
+                cout << "[ " << M->getID();
+                sizeEW++;
+            }
+            else if(M->getStatus() != 'I')
+            {
+                cout << ", " << M->getID();
+                sizeEW++;
             }
         }
-        cout << "]";
-        for (int i = 0; i < sizeEM; i++)
+        cout << "]   ";
+        while(!temp->isEmpty())
         {
-            EM->dequeue(M);
+            temp->dequeue(M);
             EM->enqueue(M, M->calcWeight());
         }
     }
     if ((PM->peek(M)) && (M->getStatus() == 'W'))
     {
-        cout << "( ";
-        for (int i = 0; i < sizePM; i++)
+        LinkedQueue<Mission*>* temp = new LinkedQueue<Mission*>();
+        while (!PM->isEmpty())
         {
             PM->dequeue(M);
-            PM->enqueue(M);
-            if (M->getStatus() != 'I')
+            temp->enqueue(M);
+            if ((sizeEW == 0) && (M->getStatus() != 'I'))
             {
-                cout << M->getID() << " ";
-                if (i < sizePM - 1)
-                {
-                    cout << ", ";
-                }
+                cout << "( " << M->getID();
+                sizePW++;
+            }
+            else if (M->getStatus() != 'I')
+            {
+                cout << ", " << M->getID();
+                sizePW++;
             }
         }
-        cout << ")";
-        for (int i = 0; i < sizePM; i++)
+        cout << ")\t";
+        while (!temp->isEmpty())
         {
-            PM->dequeue(M);
+            temp->dequeue(M);
             PM->enqueue(M);
         }
     }
@@ -476,106 +532,125 @@ void MarsStation::O_InExec()
 {
     Rover* R;
     int sizeRIE = RIE->getSize();
+    int sizePR = 0;
+    int sizeER = 0;
     if ((RIE->peek(R)) && (R->getStatus() == 'I'))
     {
-        if (R->getType() == 'E')
+        PriorityQueue<Rover*>* temp = new PriorityQueue<Rover*>();
+        for (int i = 0; i < sizeRIE; i++)
         {
-            cout << "[ ";
-            for (int i = 0; i < sizeRIE; i++)
+            RIE->dequeue(R);
+            if (R->getptrToMission()->getType() == 'E' && sizeER == 0)
             {
-                RIE->dequeue(R);
-                RIE->sort_asc_enqueue(R, R->getptrToMission()->calcWeight());
-                if (R->getDayToLeaveFromExecution() <= CurrentDay)
-                {
-                    cout << R->getID() << " ";
-                    if (i < sizeRIE - 1)
-                    {
-                        cout << ", ";
-                    }
-                }
+                cout << "[" << R->getptrToMission()->getID() << "/" << R->GetID();
+                sizeER++;
+                temp->enqueue(R, GetED(R->getptrToMission(), 'E'));
             }
-            cout << "]";
-            for (int i = 0; i < sizeRIE; i++)
+            else if (R->getptrToMission()->getType() == 'E')
             {
-                RIE->dequeue(R);
-                RIE->enqueue(R, R->getptrToMission()->calcWeight());
+                temp->enqueue(R, GetED(R->getptrToMission(), 'E'));
+                cout << ", " << R->getptrToMission()->getID() << "/" << R->GetID();
+                sizeER++;
             }
+            else
+                temp->enqueue(R, GetED(R->getptrToMission(), 'P'));
         }
-        else if (R->getType() == 'P')
+       if(sizeER!=0)
+           cout << "]   ";
+        for (int i = 0; i < sizeRIE; i++)
         {
-            cout << "( ";
-            for (int i = 0; i < sizeRIE; i++)
+            temp->dequeue(R);
+            if (R->getType() == 'E')
+                RIE->enqueue(R, GetED(R->getptrToMission(), 'E'));
+            else
+                RIE->enqueue(R, GetED(R->getptrToMission(), 'P'));
+        }
+
+        PriorityQueue<Rover*>* temp2 = new PriorityQueue<Rover*>();
+        for (int i = 0; i < sizeRIE; i++)
+        {
+            RIE->dequeue(R);
+            if (R->getptrToMission()->getType() == 'P' && sizePR == 0)
             {
-                RIE->dequeue(R);
-                RIE->enqueue(R, R->getptrToMission()->calcWeight());
-                if (R->getDayToLeaveFromExecution() <= CurrentDay)
-                {
-                    cout << R->getID() << " ";
-                    if (i < sizeRIE - 1)
-                    {
-                        cout << ", ";
-                    }
-                }
+                cout << "(" << (R->getptrToMission())->getID() << "/" << R->GetID();
+                temp2->enqueue(R, GetED(R->getptrToMission(), 'P'));
+                sizePR++;
             }
+            else if (R->getptrToMission()->getType() == 'P')
+            {
+                temp2->enqueue(R, GetED(R->getptrToMission(), 'P'));
+                cout << ", " << R->getptrToMission()->getID() << "/" << R->GetID();
+            }
+            else
+                temp2->enqueue(R, GetED(R->getptrToMission(), 'E'));
+        }
+        if(sizePR!=0)
             cout << ")";
-            for (int i = 0; i < sizeRIE; i++)
-            {
-                RIE->dequeue(R);
-                RIE->enqueue(R, R->getptrToMission()->calcWeight());
-            }
+        for (int i = 0; i < sizeRIE; i++)
+        {
+            temp2->dequeue(R);
+            if (R->getType() == 'P')
+                RIE->enqueue(R, GetED(R->getptrToMission(), 'P'));
+            else
+                RIE->enqueue(R, GetED(R->getptrToMission(), 'E'));
         }
     }
-    return;
+    else
+        return;
 }
 
 void MarsStation::O_AvailableRovers()
 {
     Rover* R;
+    int ID;
+    //SetRoverIDs();
     int sizeER = ER->getSize();
     int sizePR = PR->getSize();
     if ((ER->peek(R)) && (R->getStatus() == 'A'))
     {
-        cout << "[ ";
+        PriorityQueue<Rover*>* temp = new PriorityQueue<Rover*>();
+        cout << "[";
         for (int i = 0; i < sizeER; i++)
         {
+
             ER->dequeue(R);
-            ER->sort_asc_enqueue(R, R->getSpeed());
-            if (R->getStatus() == 'A')
-            {
-                cout << R->getID() << " "; 
+            temp->enqueue(R, R->getSpeed());
+            ID = R->GetID();
+            cout << ID;
                 if (i < sizeER - 1)
                 {
                     cout << ", ";
                 }
-            }
         }
-        cout << "]";
+        cout << "]   ";
         for (int i = 0; i < sizeER; i++)
         {
-            ER->dequeue(R);
+            temp->dequeue(R);
             ER->enqueue(R, R->getSpeed());
         }
     }
     if ((PR->peek(R)) && (R->getStatus() == 'A'))
     {
-        cout << "( ";
+        PriorityQueue<Rover*>* temp = new PriorityQueue<Rover*>();
+        cout << "(";
         for (int i = 0; i < sizePR; i++)
         {
             PR->dequeue(R);
-            PR->sort_asc_enqueue(R, R->getSpeed());
+            temp->enqueue(R, R->getSpeed());
             if (R->getStatus() == 'A')
             {
-                cout << R->getID() << " ";
+                cout << R->GetID();
                 if (i < sizePR - 1)
                 {
                     cout << ", ";
                 }
             }
+
         }
         cout << ")";
         for (int i = 0; i < sizePR; i++)
         {
-            PR->dequeue(R);
+            temp->dequeue(R);
             PR->enqueue(R, R->getSpeed());
         }
     }
@@ -587,51 +662,35 @@ void MarsStation::O_InCheckupRovers()
     Rover* R;
     int sizeERCH = ERCH->getSize();
     int sizePRCH = PRCH->getSize();
-    if ((ERCH->peek(R)) && (R->getStatus() == 'U'))
+    if (ERCH->peek(R))
     {
         cout << "[ ";
         for (int i = 0; i < sizeERCH; i++)
         {
             ERCH->dequeue(R);
             ERCH->enqueue(R);
-            if (R->getStatus() == 'U')
+            cout << R->GetID() << " ";
+            if (i < sizeERCH - 1)
             {
-                cout << R->getID() << " ";
-                if (i < sizeERCH - 1)
-                {
-                    cout << ", ";
-                }
+                cout << ", ";
             }
         }
         cout << "]";
-        for (int i = 0; i < sizeERCH; i++)
-        {
-            ERCH->dequeue(R);
-            ERCH->enqueue(R);
-        }
     }
-    if ((PRCH->peek(R)) && (R->getStatus() == 'CH'))
+    if (PRCH->peek(R))
     {
         cout << "( ";
         for (int i = 0; i < sizePRCH; i++)
         {
             PRCH->dequeue(R);
             PRCH->enqueue(R);
-            if (R->getStatus() == 'U')
+            cout << R->GetID() << " ";
+            if (i < sizePRCH - 1)
             {
-                cout << R->getID() << " ";
-                if (i < sizePRCH - 1)
-                {
-                    cout << ", ";
-                }
+                cout << ", ";
             }
         }
         cout << ")";
-        for (int i = 0; i < sizePRCH; i++)
-        {
-            PRCH->dequeue(R);
-            PRCH->enqueue(R);
-        }
     }
     return;
 }
@@ -693,11 +752,14 @@ void MarsStation::CheckCompleted()
                 if (R->getType() == 'E')
                 {
                     ER->enqueue(R, R->getSpeed());
+                    R->setStatus('A');
                 }
                 else if (R->getType() == 'P')
                 {
                     PR->enqueue(R, R->getSpeed());
+                    R->setStatus('A');
                 }
+
             }
             M = R->getptrToMission();
             CM->sort_asc_enqueue(R->getptrToMission(), (R->getptrToMission())->getCompletedDay());
@@ -745,22 +807,22 @@ bool MarsStation::isFailed(Mission* M, Rover* R)
 //Omar AbdelAzeem
 int MarsStation::GetED(Mission* M, char rovertype) //To get the Execution Days 
 {
-    int Day;
+    int Day=10000000;
     Rover* r;
-    if ((M->getType() == 'E') && (rovertype=='E')) //if it was an Emergency mission with an emergency rover assigned to it
+    if ((M->getType() == 'E') && (rovertype=='E') && (ER->peek(r))) //if it was an Emergency mission with an emergency rover assigned to it
     {
         ER->peek(r);
-        Day = ceil(M->getDuration() + (((M->getTargetLocation() / /*r->getSpeed())*/ 6) / 25) * 2));    //(the days it takes to reach the target location, fulfill mission requirements, and then get back to the base station)
+        Day = ceil(M->getDuration() + ((((M->getTargetLocation() / r->getSpeed())) / 25) * 2));    //(the days it takes to reach the target location, fulfill mission requirements, and then get back to the base station)
     }
-    else if ((M->getType() == 'E') && (rovertype == 'P')) //if it was an Emergency mission with a polar rover assigned to it
+    else if ((M->getType() == 'E') && (rovertype == 'P') &&(PR->peek(r))) //if it was an Emergency mission with a polar rover assigned to it
     {
         PR->peek(r);
-        Day = ceil(M->getDuration() + (((M->getTargetLocation() / /*r->getSpeed())*/ 6) /25) * 2));      //(the days it takes to reach the target location, fulfill mission requirements, and then get back to the base station)
+        Day = ceil(M->getDuration() + (((M->getTargetLocation() / r->getSpeed()) /25) * 2));      //(the days it takes to reach the target location, fulfill mission requirements, and then get back to the base station)
     }
-    else if ((M->getType() == 'P') && (rovertype=='P')) //if it was a Polar mission it must have a polar rover
+    else if ((M->getType() == 'P') && (rovertype=='P') && (PR->peek(r))) //if it was a Polar mission it must have a polar rover
     {
         PR->peek(r);
-        Day = ceil(M->getDuration() + ((M->getTargetLocation() / /*r->getSpeed())*/ 6) / 25)*2);      //(the days it takes to reach the target location, fulfill mission requirements, and then get back to the base station)
+        Day = ceil(M->getDuration() + (((M->getTargetLocation() / r->getSpeed()) / 25) * 2));      //(the days it takes to reach the target location, fulfill mission requirements, and then get back to the base station)
     }
     return Day;
 }

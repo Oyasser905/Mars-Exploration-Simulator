@@ -11,7 +11,7 @@ private:
 	int targetLocation;
 	int duration;
 	int significance;
-	char status; //I : In-Execution    C: Completed    W: Waiting
+	char status; //I : In-Execution    C: Completed    W: Waiting    N: Not assigned
 	int weight;
 	int ED;
 	int WD; 
