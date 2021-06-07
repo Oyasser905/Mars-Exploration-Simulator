@@ -376,7 +376,7 @@ void MarsStation::Assign_M_to_R()
     Mission* m;
     Rover* r;
     int v;
-    while ((EM->peek(m)) && (m->getType() == 'E') && (m->getStatus()!='I')) //assign emergency missions first
+    while ((EM->peek(m)) && (m->getType() == 'E') && (m->getStatus()!='I') && (m->getStatus()!='C')) //assign emergency missions first
     {
         Rover* EmergencyRover = GetEmergencyRover();
         if (EmergencyRover) //if an emergency rover was available
@@ -417,7 +417,7 @@ void MarsStation::Assign_M_to_R()
         }
     }
 
-    while ((PFAIL->peek(m)) && (m->getDay() <= CurrentDay) && (m->getType() == 'P') && (m->getStatus()!='I'))
+    while ((PFAIL->peek(m)) && (m->getType() == 'P') && (m->getStatus()!='I')&&(m->getStatus() != 'C'))
     {
         Rover* PolarRover = GetPolarRover();
         if (PolarRover) //if a polar rover was available
@@ -439,7 +439,7 @@ void MarsStation::Assign_M_to_R()
         }
     }
 
-    while ((PM->peek(m))&& (m->getDay() <= CurrentDay) && (m->getType() == 'P') && (m->getStatus()!='I')) //then assign polar missions
+    while ((PM->peek(m)) && (m->getType() == 'P') && (m->getStatus()!='I')&& (m->getStatus() != 'C')) //then assign polar missions
     {
         Rover* PolarRover = GetPolarRover();
         if (PolarRover) //if an emergency rover was available
@@ -822,7 +822,6 @@ void MarsStation::CheckCompleted()
             }
             M = R->getptrToMission();
             CM->sort_asc_enqueue(R->getptrToMission(), (R->getptrToMission())->getCompletedDay());
-            delete M;
         }
 
     }
