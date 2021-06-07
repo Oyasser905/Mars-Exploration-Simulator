@@ -16,8 +16,7 @@ int main()
 {
     MarsStation mars;
     mars.UI_r();
-    int currentday = 1;
-    mars.setCurrentDay(currentday);
+    int currentday = 0;
    // mars.SetRoverIDs();
     mars.chooseMode();
     //step 1: read info and distribute 3ashan ye2dar yed5ol fel while
@@ -25,14 +24,15 @@ int main()
     //therefore create link
     while (!mars.CheckAreWeDone())
     {
+        currentday++;
+        mars.setCurrentDay(currentday);
         mars.checkEvents();
         mars.CheckCompleted();
         mars.ReturnFromCheckUp(); //returns rovers that have completed check up as some could have high speeds and hence higher priority
         mars.Assign_M_to_R();
         mars.UI_p();
         mars.test();
-        currentday++;
-        mars.setCurrentDay(currentday);
+
     }
     mars.UI_w();
 }

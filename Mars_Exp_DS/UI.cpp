@@ -42,6 +42,9 @@ void UI::r_input()
 {
     string i_file = "input_info.txt";
     ifstream fptr;
+    cout << "(Please include file extension)\nEnter input file name: ";
+    cin >> i_file;
+    fptr.open(i_file);
     //Check if input of file name is correct and in directory
     /*do 
     {
@@ -50,7 +53,12 @@ void UI::r_input()
         fptr.open(i_file);
         cout << "\nError! Unable to open input file successfully.\n\n";
     } while (fptr.fail());*/
-    fptr.open(i_file);
+    while (!fptr.is_open())
+    {
+        cout << "(Please include file extension)\nEnter input file name: ";
+        cin >> i_file;
+        fptr.open(i_file);
+    }
     system("CLS");
 
     //Input file name is correct 
@@ -74,6 +82,20 @@ void UI::r_input()
                 pr_sp >> er_sp >>
                 num_missions >> pr_ch >> er_ch >>
                 no_events;
+
+
+            int* ERoversSpeeds = new int[num_er];
+            int* PRoversSpeeds = new int[num_pr];
+
+            for (int i = 0; i < num_pr; i++)
+            {
+                fptr >> PRoversSpeeds[i];
+            }
+
+            for (int i = 0; i < num_er; i++)
+            {
+                fptr >> ERoversSpeeds[i];
+            }
 
             LinkedQueue<Event*>* EV = obj->GetEV();
             for (int i = 0; i < no_events; i++)
