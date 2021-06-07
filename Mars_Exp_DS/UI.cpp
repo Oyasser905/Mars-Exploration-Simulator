@@ -40,22 +40,16 @@ void UI::input_contents_console(string i_file)
 
 void UI::r_input()
 {
-    string i_file = "input_info.txt";
+    string i_file;
     ifstream fptr;
     cout << "(Please include file extension)\nEnter input file name: ";
     cin >> i_file;
     fptr.open(i_file);
+
     //Check if input of file name is correct and in directory
-    /*do 
-    {
-        cout << "(Please include file extension)\nEnter input file name: ";
-        cin >> i_file;
-        fptr.open(i_file);
-        cout << "\nError! Unable to open input file successfully.\n\n";
-    } while (fptr.fail());*/
     while (!fptr.is_open())
     {
-        cout << "(Please include file extension)\nEnter input file name: ";
+        cout << "\n\n(Please include file extension)\nError! Re-Enter input file name: ";
         cin >> i_file;
         fptr.open(i_file);
     }
@@ -84,18 +78,18 @@ void UI::r_input()
                 no_events;
 
 
-            int* ERoversSpeeds = new int[num_er];
-            int* PRoversSpeeds = new int[num_pr];
+            //int* ERoversSpeeds = new int[num_er];
+            //int* PRoversSpeeds = new int[num_pr];
 
-            for (int i = 0; i < num_pr; i++)
-            {
-                fptr >> PRoversSpeeds[i];
-            }
+            //for (int i = 0; i < num_pr; i++)
+            //{
+            //    fptr >> PRoversSpeeds[i];
+            //}
 
-            for (int i = 0; i < num_er; i++)
-            {
-                fptr >> ERoversSpeeds[i];
-            }
+            //for (int i = 0; i < num_er; i++)
+            //{
+            //    fptr >> ERoversSpeeds[i];
+            //}
 
             LinkedQueue<Event*>* EV = obj->GetEV();
             for (int i = 0; i < no_events; i++)

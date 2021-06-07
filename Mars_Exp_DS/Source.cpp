@@ -19,9 +19,7 @@ int main()
     int currentday = 0;
    // mars.SetRoverIDs();
     mars.chooseMode();
-    //step 1: read info and distribute 3ashan ye2dar yed5ol fel while
-    //step 2: output yezhar ma3 el currentday
-    //therefore create link
+
     while (!mars.CheckAreWeDone())
     {
         currentday++;
@@ -31,12 +29,8 @@ int main()
         mars.ReturnFromCheckUp(); //returns rovers that have completed check up as some could have high speeds and hence higher priority
         mars.Assign_M_to_R();
         mars.UI_p();
-        mars.test();
+        //mars.test();
 
     }
     mars.UI_w();
 }
-
-//Number 1 ne2ra awel wa7da
-//Number 2 el ID el zero fel awel
-//no
