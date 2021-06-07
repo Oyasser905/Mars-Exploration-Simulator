@@ -75,6 +75,7 @@ public:
 	void O_InExec();
 	void O_AvailableRovers();
 	void O_InCheckupRovers();
+	void O_CompletedMissions();
 	void checkEvents(); //distributes the events
 	void test();
 	

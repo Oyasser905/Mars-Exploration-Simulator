@@ -135,7 +135,7 @@ void UI::Interactive_mode()
     cout << "------------------------------------------\n";
     cout << i_c << " In-Checkup Rovers: "; obj->O_InCheckupRovers(); cout << "\n";
     cout << "------------------------------------------\n";
-    cout << c_m << " Completed Missions: "; obj->CheckCompleted(); cout << "\n\n\n";
+    cout << c_m << " Completed Missions: "; obj->O_CompletedMissions(); cout << "\n\n\n";
     
 }
 
@@ -152,7 +152,7 @@ void UI::SbS_mode()
         cout << "------------------------------------------\n";
         cout << i_c << " In-Checkup Rovers: "; obj->O_InCheckupRovers(); cout << "\n";
         cout << "------------------------------------------\n";
-        cout << c_m << " Completed Missions: "; obj->CheckCompleted(); cout << "\n\n\n";
+        cout << c_m << " Completed Missions: "; obj->O_CompletedMissions(); cout << "\n\n\n";
         Sleep(1000);
 }
 

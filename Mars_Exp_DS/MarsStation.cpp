@@ -695,6 +695,65 @@ void MarsStation::O_InCheckupRovers()
     return;
 }
 
+void MarsStation::O_CompletedMissions()
+{
+    Mission* M;
+    int c=CM->getSize();
+    int sizeCM = 0;
+    if (CM->peek(M))
+    {
+        PriorityQueue<Mission*>* temp = new PriorityQueue<Mission*>();
+        for (int i = 0; i < c; i++)
+        {
+            CM->dequeue(M);
+            if (M->getStatus() == 'C' && sizeCM == 0 && M->getType()=='E')
+            {
+                cout << "[" << M->getID();
+                sizeCM++;
+                temp->enqueue(M, M->getCompletedDay());
+            }
+            else if (M->getStatus()== 'C' && M->getType()=='E')
+            {
+                temp->enqueue(M, M->getCompletedDay());
+                cout << ", " << M->getID();
+                sizeCM++;
+            }
+        }
+        if (sizeCM != 0)
+            cout << "]  ";
+        for (int i = 0; i < c; i++)
+        {
+            temp->dequeue(M);
+            CM->sort_asc_enqueue(M, M->getCompletedDay());
+        }
+        sizeCM = 0;
+        PriorityQueue<Mission*>* temp2 = new PriorityQueue<Mission*>();
+        for (int i = 0; i < c; i++)
+        {
+            CM->dequeue(M);
+            if (M->getStatus() == 'C' && sizeCM == 0 && M->getType() == 'P')
+            {
+                cout << "(" << M->getID();
+                sizeCM++;
+                temp2->enqueue(M, M->getCompletedDay());
+            }
+            else if (M->getStatus() == 'C' && M->getType() == 'P')
+            {
+                temp2->enqueue(M, M->getCompletedDay());
+                cout << ", " << M->getID();
+                sizeCM++;
+            }
+        }
+        if (sizeCM != 0)
+            cout << ")";
+        for (int i = 0; i < c; i++)
+        {
+            temp2->dequeue(M);
+            CM->sort_asc_enqueue(M, M->getCompletedDay());
+        }
+    }
+}
+
 void MarsStation::checkEvents()
 {
     Event* E;
