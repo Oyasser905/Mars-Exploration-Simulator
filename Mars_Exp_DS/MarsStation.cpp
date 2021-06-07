@@ -933,12 +933,10 @@ bool MarsStation::isFailed(Mission* M, Rover* R)
         if (c == 'P')
         {
             PFAIL->enqueue(M);
-            delete M;
         }
         else if (c == 'E')
         {
             EM->enqueue(M, M->calcWeight());
-            delete M;
         }
         return true;
     }
