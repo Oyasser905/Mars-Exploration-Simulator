@@ -72,24 +72,27 @@ void UI::r_input()
             int sig; //Mission Significance
             //Read input in variables
             fptr >>
-                num_pr >> num_er >>
-                pr_sp >> er_sp >>
-                num_missions >> pr_ch >> er_ch >>
+                num_er >> num_pr;
+
+            LinkedQueue<int>* ERSpd = new LinkedQueue<int>();
+            LinkedQueue<int>* PRSpd = new LinkedQueue<int>();
+
+            for (int i = 0; i < num_er; i++)
+            {
+                int x;
+                fptr >> x;
+                ERSpd->enqueue(x);
+            }
+
+            for (int i = 0; i < num_pr; i++)
+            {
+                int x;
+                fptr >> x;
+                PRSpd->enqueue(x);
+            }
+            fptr >>
+                num_missions >> er_ch >> pr_ch >>
                 no_events;
-
-
-            //int* ERoversSpeeds = new int[num_er];
-            //int* PRoversSpeeds = new int[num_pr];
-
-            //for (int i = 0; i < num_pr; i++)
-            //{
-            //    fptr >> PRoversSpeeds[i];
-            //}
-
-            //for (int i = 0; i < num_er; i++)
-            //{
-            //    fptr >> ERoversSpeeds[i];
-            //}
 
             LinkedQueue<Event*>* EV = obj->GetEV();
             for (int i = 0; i < no_events; i++)
@@ -106,18 +109,22 @@ void UI::r_input()
             int k;
             for (int i = 0; i < num_er; i++)
             {
-                Rover* er = new Rover('E', er_sp, er_ch, num_missions, i);
+                int x;
+                ERSpd->dequeue(x);
+                Rover* er = new Rover('E', x, er_ch, num_missions, i);
                 er->setStatus('A');
-                obj->GetER()->enqueue(er, er_sp);
+                obj->GetER()->enqueue(er, x);
                 if (i == num_er - 1)
-                    k = i+1;
+                    k = i + 1;
 
             }
             for (int i = 0; i < num_pr; i++)
             {
-                Rover* pr = new Rover('P', er_sp, er_ch, num_missions, k+i);
+                int x;
+                PRSpd->dequeue(x);
+                Rover* pr = new Rover('P', x, er_ch, num_missions, k + i);
                 pr->setStatus('A');
-                obj->GetPR()->enqueue(pr, pr_sp);
+                obj->GetPR()->enqueue(pr, x);
             }
         }
         fptr.close();

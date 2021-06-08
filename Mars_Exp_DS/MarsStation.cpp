@@ -906,4 +906,68 @@ int MarsStation::GetED(Mission* M, char rovertype) //To get the Execution Days
 }
 
 
+MarsStation::~MarsStation()
+{
+    //Delete Missions
+    Mission* M;
+    while (!EM->isEmpty())
+    {
+        EM->dequeue(M);
+        delete M;
+    }
+    while (!PM->isEmpty())
+    {
+        PM->dequeue(M);
+        delete M;
+    }
+    while (!CM->isEmpty())
+    {
+        CM->dequeue(M);
+        delete M;
+    }
+    while (!PFAIL->isEmpty())
+    {
+        PFAIL->dequeue(M);
+        delete M;
+    }
 
+    //Rovers
+    Rover* R;
+    while (!PR->isEmpty())
+    {
+        PR->dequeue(R);
+        delete R;
+    }
+    while (!ER->isEmpty())
+    {
+        ER->dequeue(R);
+        delete R;
+    }
+    while (!ERCH->isEmpty())
+    {
+        ERCH->dequeue(R);
+        delete R;
+    }
+    while (!PRCH->isEmpty())
+    {
+        PRCH->dequeue(R);
+        delete R;
+    }
+    while (!RIE->isEmpty())
+    {
+        RIE->dequeue(R);
+        delete R;
+    }
+
+    //Events
+    Event* E;
+    while (!EV->isEmpty())
+    {
+        EV->dequeue(E);
+        delete E;
+    }
+
+    //Dynamically Allocated Members
+    delete uiobj;
+
+}

@@ -33,6 +33,7 @@ private:
 public:
 
 	MarsStation();
+	~MarsStation();
 
 	//setters
 	void setCurrentDay(int day);
