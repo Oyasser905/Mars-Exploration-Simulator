@@ -45,7 +45,6 @@ public:
 	Mission* getptrToMission(); //gets pointer to mission a rover is executing
 	int getDayToLeaveFromExecution(); //gets the day to leave from execution
 	
-	//fn
 
 };
 

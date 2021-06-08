@@ -12,6 +12,7 @@ private:
 	int NumberERovers;
 	int eventsWaiting;
 	int WaitingTotal;
+	int TotalExecution;
 	LinkedQueue<Event*>* EV;
 
 	PriorityQueue<Rover*>* ER; //Emergency Rovers Priority Queue
@@ -37,7 +38,6 @@ public:
 
 	//setters
 	void setCurrentDay(int day);
-	void SetRoverIDs();
 	void setEV(LinkedQueue<Event*>* e);
 	void setEM(PriorityQueue<Mission*>* ME);
 	void setPM(LinkedQueue<Mission*>* MP);
@@ -52,8 +52,9 @@ public:
 	void SetNumberPMissions(int s);
 	void SetNumberPRovers(int s);
 	void SetNumberERovers(int s);
-	void SetEventsWaiting(int s);
+	void SetEventsWaiting();
 	void SetWaitingTotal(int s);
+	void SetExecutionDays(int s);
 
 	//getters
 	int getCurrentDay();
@@ -75,6 +76,7 @@ public:
 	int GetNumberPMissions();
 	int GetNumberPRovers();
 	int GetNumberERovers();
+	int GetExecutionDays(); //Total
 	int GetED(Mission* M, char c); //To get the Execution Days 
 	//int GetCD(Mission* M, char rovertype); //To get the Completion Day
 	//int getCompletedMissions();

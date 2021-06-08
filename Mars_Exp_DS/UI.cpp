@@ -149,8 +149,7 @@ void UI::Interactive_mode()
     cin.get(x);
     system("CLS");
     cout << "Current Day: " << obj->getCurrentDay() << "\n";
-    int w_m = 7, i_e = 4, a_r = 4, i_c = 2, c_m = 3;
-    cout << w_m << " Waiting Missions: "; obj->O_Waiting(); cout << "\n";
+    cout << (obj->GetEM()->getSize())+(obj->GetPM()->getSize()) << " Waiting Missions: "; obj->O_Waiting(); cout << "\n";
     cout << "------------------------------------------\n";
     cout << (obj->GetRIE())->getSize() << " In-Execution Missions/Rovers: "; obj->O_InExec(); cout << "\n";
     cout << "------------------------------------------\n";
@@ -165,9 +164,8 @@ void UI::Interactive_mode()
 void UI::SbS_mode()
 {
         system("CLS");
-        int w_m = 7, i_e = 4, a_r = 4, i_c = 2, c_m = 3;
         cout << "Current Day: " << obj->getCurrentDay() << "\n";
-        cout << w_m << " Waiting Missions: "; obj->O_Waiting(); cout << "\n";
+        cout << (obj->GetEM()->getSize()) + (obj->GetPM()->getSize()) << " Waiting Missions: "; obj->O_Waiting(); cout << "\n";
         cout << "------------------------------------------\n";
         cout << (obj->GetRIE())->getSize() << " In-Execution Missions/Rovers: "; obj->O_InExec(); cout << "\n";
         cout << "------------------------------------------\n";
@@ -198,11 +196,15 @@ void UI::w_file()
     {
         Mission* M;
         myfile << "CD\tID\tFD\tWD\tED\n";
+        int k;
+        int o;
         for (int i = 0; i < j; i++)
         {
             obj->GetCM()->dequeue(M);
-            int k = M->getWaitingDays();
+            k = M->getWaitingDays();
+            o = M->getExecutionDays();
             obj->SetWaitingTotal(k);
+            obj->SetExecutionDays(o);
             myfile << M->getCompletedDay() << "\t" << M->getID() << "\t" << M->getDay() << "\t" << M->getWaitingDays() << "\t" << M->getExecutionDays() << "\n";
             temp->enqueue(M,M->getCompletedDay());
         }
@@ -221,7 +223,7 @@ void UI::w_file()
             b = 0;
         else
             b = ((obj->GetWaitingTotal()) / (obj->GetEventsWaiting()));
-        myfile << "Avg Wait=" << b << ", Avg Exec=";
+        myfile << "Avg Wait=" << b << ", Avg Exec="<< ((obj->GetExecutionDays() / obj->GetNumberEMissions()));
         myfile.close();
     }
     else cout << "Unable to write to file...";
