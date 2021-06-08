@@ -145,13 +145,13 @@ void UI::Interactive_mode()
     int w_m = 7, i_e = 4, a_r = 4, i_c = 2, c_m = 3;
     cout << w_m << " Waiting Missions: "; obj->O_Waiting(); cout << "\n";
     cout << "------------------------------------------\n";
-    cout << a_r << " In-Execution Missions/Rovers: "; obj->O_InExec(); cout << "\n";
+    cout << (obj->GetRIE())->getSize() << " In-Execution Missions/Rovers: "; obj->O_InExec(); cout << "\n";
     cout << "------------------------------------------\n";
-    cout << w_m << " Available Rovers: "; obj->O_AvailableRovers(); cout << "\n";
+    cout << (obj->GetER()->getSize()) + (obj->GetPR()->getSize()) << " Available Rovers: "; obj->O_AvailableRovers(); cout << "\n";
     cout << "------------------------------------------\n";
-    cout << i_c << " In-Checkup Rovers: "; obj->O_InCheckupRovers(); cout << "\n";
+    cout << (obj->GetERCH()->getSize()) + (obj->GetPRCH()->getSize()) << " In-Checkup Rovers: "; obj->O_InCheckupRovers(); cout << "\n";
     cout << "------------------------------------------\n";
-    cout << c_m << " Completed Missions: "; obj->O_CompletedMissions(); cout << "\n\n\n";
+    cout << (obj->GetCM())->getSize() << " Completed Missions: "; obj->O_CompletedMissions(); cout << "\n\n\n";
     
 }
 
@@ -162,13 +162,13 @@ void UI::SbS_mode()
         cout << "Current Day: " << obj->getCurrentDay() << "\n";
         cout << w_m << " Waiting Missions: "; obj->O_Waiting(); cout << "\n";
         cout << "------------------------------------------\n";
-        cout << a_r << " In-Execution Missions/Rovers: "; obj->O_InExec(); cout << "\n";
+        cout << (obj->GetRIE())->getSize() << " In-Execution Missions/Rovers: "; obj->O_InExec(); cout << "\n";
         cout << "------------------------------------------\n";
-        cout << w_m << " Available Rovers: "; obj->O_AvailableRovers(); cout << "\n";
+        cout << (obj->GetER()->getSize())+(obj->GetPR()->getSize()) << " Available Rovers: "; obj->O_AvailableRovers(); cout << "\n";
         cout << "------------------------------------------\n";
-        cout << i_c << " In-Checkup Rovers: "; obj->O_InCheckupRovers(); cout << "\n";
+        cout << (obj->GetERCH()->getSize()) + (obj->GetPRCH()->getSize()) << " In-Checkup Rovers: "; obj->O_InCheckupRovers(); cout << "\n";
         cout << "------------------------------------------\n";
-        cout << c_m << " Completed Missions: "; obj->O_CompletedMissions(); cout << "\n\n\n";
+        cout << (obj->GetCM())->getSize() << " Completed Missions: "; obj->O_CompletedMissions(); cout << "\n\n\n";
         Sleep(1000);
 }
 
@@ -186,6 +186,7 @@ void UI::w_file()
     cin >> o_file;
     int j=obj->GetCM()->getSize();
     ofstream myfile(o_file);
+    PriorityQueue<Mission*>* temp = new PriorityQueue<Mission*>(*(obj->GetCM()));
     if (myfile.is_open())
     {
         Mission* M;
@@ -193,14 +194,27 @@ void UI::w_file()
         for (int i = 0; i < j; i++)
         {
             obj->GetCM()->dequeue(M);
-            obj->GetCM()->enqueue(M,M->getCompletedDay());
-            myfile << M->getCompletedDay()<<"\t"<<M->getID()<<"\t"<<M->getDay()<<"\t"<<M->getWaitingDays()<<"\t"<<M->getExecutionDays()<<"\n";
+            int k = M->getWaitingDays();
+            obj->SetWaitingTotal(k);
+            myfile << M->getCompletedDay() << "\t" << M->getID() << "\t" << M->getDay() << "\t" << M->getWaitingDays() << "\t" << M->getExecutionDays() << "\n";
+            temp->enqueue(M,M->getCompletedDay());
         }
         for (int i = 0; i < j; i++)
         {
-            obj->GetCM()->dequeue(M);
-            obj->GetCM()->sort_asc_enqueue(M, M->getCompletedDay());
+            temp->dequeue(M);
+            obj->GetCM()->enqueue(M, (-1*M->getCompletedDay()));
         }
+        myfile << "...................................................................................................." << endl;
+        myfile << endl;
+        myfile << "...................................................................................................." << endl;
+        myfile << "Missions " << (obj->GetNumberEMissions()) + (obj->GetNumberPMissions()) << " [P :" << obj->GetNumberPMissions() << ", E:" << obj->GetNumberEMissions() << "]" << endl;
+        myfile<<"Rovers " << (obj->GetNumberERovers()) + (obj->GetNumberPRovers()) << " [P :" << obj->GetNumberPRovers() << ", E:" << obj->GetNumberERovers() << "]" << endl;
+        float b=0;
+        if (obj->GetEventsWaiting() == 0)
+            b = 0;
+        else
+            b = ((obj->GetWaitingTotal()) / (obj->GetEventsWaiting()));
+        myfile << "Avg Wait=" << b << ", Avg Exec=";
         myfile.close();
     }
     else cout << "Unable to write to file...";

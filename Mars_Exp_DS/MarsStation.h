@@ -1,11 +1,17 @@
 #pragma once
 #include "UI.h"
-
+#include <cmath>
 class MarsStation
 {
 
 private:
 	int CurrentDay;
+	int NumberEMissions;
+	int NumberPMissions;
+	int NumberPRovers;
+	int NumberERovers;
+	int eventsWaiting;
+	int WaitingTotal;
 	LinkedQueue<Event*>* EV;
 
 	PriorityQueue<Rover*>* ER; //Emergency Rovers Priority Queue
@@ -41,6 +47,12 @@ public:
 	void setRIE(PriorityQueue<Rover*>* RI);
 	void setPFAIL(LinkedQueue<Mission*>* PF);
 	void setCM(PriorityQueue<Mission*>* C);
+	void SetNumberEMissions(int s);
+	void SetNumberPMissions(int s);
+	void SetNumberPRovers(int s);
+	void SetNumberERovers(int s);
+	void SetEventsWaiting(int s);
+	void SetWaitingTotal(int s);
 
 	//getters
 	int getCurrentDay();
@@ -56,11 +68,19 @@ public:
 	PriorityQueue<Mission*>* GetCM();
 	Rover* GetEmergencyRover();
 	Rover* GetPolarRover();
+	int GetEventsWaiting();
+	int GetWaitingTotal();
+	int GetNumberEMissions();
+	int GetNumberPMissions();
+	int GetNumberPRovers();
+	int GetNumberERovers();
 	int GetED(Mission* M, char c); //To get the Execution Days 
 	//int GetCD(Mission* M, char rovertype); //To get the Completion Day
 	//int getCompletedMissions();
 
 	//functions
+	void initialize();
+	void initialize2();
 	bool NeedsCheckUp(Rover* R, char s); //If character sent is "C" it sends rover to Check-Up if needed and returns true if rover went to checkup and false if it did not need to. If character sent is "F" it immediately sends rover to checkup
 	void ReturnFromCheckUp(); //Checks if there are rovers that finished checkup and gets them back
 	void Assign_M_to_R();
@@ -77,6 +97,5 @@ public:
 	void O_InCheckupRovers();
 	void O_CompletedMissions();
 	void checkEvents(); //distributes the events
-	void test();
 	
 };

@@ -10,12 +10,14 @@
 #include"MarsStation.h"
 #include"priorityQueue.h"
 #include"windows.h"
+#include <cmath>
 using namespace std;
 
 int main()
 {
     MarsStation mars;
     mars.UI_r();
+    mars.initialize();
     int currentday = 0;
    // mars.SetRoverIDs();
     mars.chooseMode();
@@ -32,5 +34,6 @@ int main()
         //mars.test();
 
     }
+    mars.initialize2();
     mars.UI_w();
 }

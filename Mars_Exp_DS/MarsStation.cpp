@@ -6,10 +6,18 @@
 #include "FormulationEvent.h"
 #include "MarsStation.h"
 #include "time.h"
+#include <cmath>
 using namespace std;
 
 MarsStation::MarsStation()
 {
+    int CurrentDay=0;
+    NumberEMissions=0;
+    NumberPMissions=0;
+    NumberPRovers=0;
+    NumberERovers=0;
+    eventsWaiting = 0;
+    WaitingTotal = 0;
     EV = new LinkedQueue<Event*>();
 
     ER = new PriorityQueue<Rover*>(); //Emergency Rovers Priority Queue
@@ -145,6 +153,36 @@ void MarsStation::setCM(PriorityQueue<Mission*>* C)
     CM = C;
 }
 
+void MarsStation::SetNumberEMissions(int s)
+{
+    NumberEMissions = s;
+}
+
+void MarsStation::SetNumberPMissions(int s)
+{
+    NumberPMissions = s;
+}
+
+void MarsStation::SetNumberPRovers(int s)
+{
+    NumberPRovers = s;
+}
+
+void MarsStation::SetNumberERovers(int s)
+{
+    NumberERovers = s;
+}
+
+void MarsStation::SetEventsWaiting(int s)
+{
+    eventsWaiting = eventsWaiting + s;
+}
+
+void MarsStation::SetWaitingTotal(int s)
+{
+    WaitingTotal = WaitingTotal + s;
+}
+
 //Malak
 int MarsStation::getCurrentDay()
 {
@@ -211,45 +249,29 @@ bool MarsStation::CheckAreWeDone()
 }
 
 
-void MarsStation::test()
+
+void MarsStation::initialize()
 {
-    /*Mission* M;
-    cout << "Test for polar mission\n";
-    int n = PM->getSize();
-    for (int i = 0; i < n; i++)
-    {
-        PM->dequeue(M);
-        cout <<  M->getID() << "\t";
-        PM->enqueue(M);
-    }
-    cout << "\n";*/
-    /* Mission* M;
-     cout << "Test for emergency mission\n";
-     int n = EM->getSize();
-     for (int i = 0; i < n; i++)
-     {
-         EM->dequeue(M);
-         cout << M->getID() << "\t";
-         EM->sort_asc_enqueue(M, M->calcWeight());
-     }
-     for (int i = 0; i < n; i++)
-     {
-         EM->dequeue(M);
-         EM->enqueue(M, M->calcWeight());
-     }
-     cout << "\n";*/
-    Event* M;
-    cout << "Test \n";
-    int n = EV->getSize();
-    for (int i = 0; i < n; i++)
-    {
-        EV->dequeue(M);
-        cout << M->getID() << "\t";
-        EV->enqueue(M);
-    }
-    cout << "\n";
+    SetNumberERovers(ER->getSize());
+    SetNumberPRovers(PR->getSize());
 }
 
+void MarsStation::initialize2()
+{
+    int n=0, k = 0;
+    Mission* M;
+    PriorityQueue<Mission*>* temp = new PriorityQueue<Mission*>(*CM);
+    while (!temp->isEmpty())
+    {
+        temp->dequeue(M);
+        if (M->getType() == 'E')
+            n++;
+        if (M->getType() == 'P')
+            k++;
+    }
+    SetNumberEMissions(n);
+    SetNumberPMissions(k);
+}
 
 //Malak
 bool MarsStation::NeedsCheckUp(Rover* R, char s) //checks if the rover needs checkup, if yes sends it to checkup and changes variable "no_missions_completed" to zero
@@ -358,17 +380,36 @@ Rover* MarsStation::GetPolarRover() //returns polar rovers that have completed c
         return nullptr;
 }
 
-//Rover* currentrover;
-//bool checkupstatus;
-//while (!ER->isEmpty())
-//{
-  //  ER->dequeue(currentrover);
-    //checkupstatus = CheckUp(currentrover);
-    //if (checkupstatus == 0)
-      //  return currentrover;
-//}
-//return nullptr;
-//}
+int MarsStation::GetEventsWaiting()
+{
+    return eventsWaiting;
+}
+
+int MarsStation::GetWaitingTotal()
+{
+    return WaitingTotal;
+}
+
+int MarsStation::GetNumberEMissions()
+{
+    return NumberEMissions;
+}
+
+int MarsStation::GetNumberPMissions()
+{
+    return NumberPMissions;
+}
+
+int MarsStation::GetNumberPRovers()
+{
+    return NumberPRovers;
+}
+
+int MarsStation::GetNumberERovers()
+{
+    return NumberERovers;
+}
+
 
 //Malak
 void MarsStation::Assign_M_to_R()
@@ -479,187 +520,83 @@ void MarsStation::O_Waiting()
 {
     PriorityQueue<Mission*>* temp = new PriorityQueue<Mission*>(*EM);
     LinkedQueue<Mission*>* temp2 = new LinkedQueue<Mission*>(*PM);
-    string PolarMissions = "(", Emeregency = "[";
-    Mission* current;
-    while (temp->peek(current))
+    Mission* M;
+    if (temp->peek(M))
     {
-        if (current->getType() == 'E')
+        cout << "["<<M->getID();
+        temp->dequeue(M);
+        while (temp->peek(M))
         {
-            Emeregency += ',';
-            Emeregency += to_string(current->getID());
+            if (M->getType() == 'E')
+            {
+                cout <<", " <<M->getID();
+            }
+            temp->dequeue(M);
         }
-        temp->dequeue(current);
+        cout << "] ";
     }
-    while (temp2->peek(current))
+    if (temp2->peek(M))
     {
-        if (current->getType() == 'P')
+        cout << "(" << M->getID();
+        temp2->dequeue(M);
+        while (temp2->peek(M))
         {
-            PolarMissions += ',';
-            PolarMissions += to_string(current->getID());
+            if (M->getType() == 'P')
+            {
+                cout <<", " <<M->getID();
+            }
+            temp2->dequeue(M);
         }
-        temp2->dequeue(current);
+        cout << ")";
     }
-    PolarMissions += ')';
-    Emeregency += ']';
-    cout << Emeregency << PolarMissions;
-    ////law awel element status W keda fih 7agaat waiting
-    ////tayeb eh el waiting (lel 7agaat el ba3do) howa el el eventday beta3o ==currentday aw el eventday beta30 faat w kamaan en el status not IE 
-    ////dequeue ha2ra el data law el lesa aylah sa7 then call asc queue and pass el M fa hatet7at fel a5er
-    ////w hafdal a3mel keda le7ad 
-    ////int s=size;
-    //Mission* M;
-    //int sizeEM = EM->getSize();
-    //int sizePM = PM->getSize();
-    //int sizeEW = 0;
-    //int sizePW = 0;
-    //if ((EM->peek(M)) && (M->getStatus() == 'W'))
-    //{
-    //    PriorityQueue<Mission*>* temp = new PriorityQueue<Mission*>();
-    //    while(!EM->isEmpty())
-    //    {
-    //        EM->dequeue(M);
-    //        temp->enqueue(M, M->calcWeight());
-    //        if ((sizeEW == 0)&&(M->getStatus() != 'I'))
-    //        {
-    //            cout << "[ " << M->getID();
-    //            sizeEW++;
-    //        }
-    //        else if(M->getStatus() != 'I')
-    //        {
-    //            cout << ", " << M->getID();
-    //            sizeEW++;
-    //        }
-    //    }
-    //    cout << "]   ";
-    //    while(!temp->isEmpty())
-    //    {
-    //        temp->dequeue(M);
-    //        EM->enqueue(M, M->calcWeight());
-    //    }
-    //}
-    //if ((PM->peek(M)) && (M->getStatus() == 'W'))
-    //{
-    //    LinkedQueue<Mission*>* temp = new LinkedQueue<Mission*>();
-    //    while (!PM->isEmpty())
-    //    {
-    //        PM->dequeue(M);
-    //        temp->enqueue(M);
-    //        if ((sizeEW == 0) && (M->getStatus() != 'I'))
-    //        {
-    //            cout << "( " << M->getID();
-    //            sizePW++;
-    //        }
-    //        else if (M->getStatus() != 'I')
-    //        {
-    //            cout << ", " << M->getID();
-    //            sizePW++;
-    //        }
-    //    }
-    //    cout << ")\t";
-    //    while (!temp->isEmpty())
-    //    {
-    //        temp->dequeue(M);
-    //        PM->enqueue(M);
-    //    }
-    //}
-    //return;
+return;
 }
 
 void MarsStation::O_InExec()
 {
     PriorityQueue<Rover*>* temp = new PriorityQueue<Rover*>(*RIE);
-    string PolarMissions = "(", Emeregency = "[";
-    Rover* current;
-    while (temp->peek(current))
+    Rover* R;
+    int sizeRIE = RIE->getSize();
+    int sizePR = 0;
+    int sizeER = 0;
+    if ((temp->peek(R)) && (R->getStatus() == 'I'))
     {
-        if (current->getType() == 'E')
+        for (int i = 0; i < sizeRIE; i++)
         {
-            Emeregency += ',';
-            Emeregency += to_string(current->getptrToMission()->getID());
-            Emeregency += '/';
-            Emeregency += to_string(current->GetID());
+            temp->dequeue(R);
+            if (R->getptrToMission()->getType() == 'E' && sizeER == 0)
+            {
+                cout << "[" << R->getptrToMission()->getID() << "/" << R->GetID();
+                sizeER++;
+            }
+            else if (R->getptrToMission()->getType() == 'E')
+            {
+                cout << ", " << R->getptrToMission()->getID() << "/" << R->GetID();
+                sizeER++;
+            }
         }
-        else if (current->getType() == 'P')
-        {
-            PolarMissions += ',';
-            PolarMissions += to_string(current->getptrToMission()->getID());
-            PolarMissions += '/';
-            PolarMissions += to_string(current->GetID());
+       if(sizeER!=0)
+           cout << "] ";
 
+        PriorityQueue<Rover*>* temp2 = new PriorityQueue<Rover*>(*RIE);
+        for (int i = 0; i < sizeRIE; i++)
+        {
+            temp2->dequeue(R);
+            if (R->getptrToMission()->getType() == 'P' && sizePR == 0)
+            {
+                cout << "(" << (R->getptrToMission())->getID() << "/" << R->GetID();
+                sizePR++;
+            }
+            else if (R->getptrToMission()->getType() == 'P')
+            {
+                cout << ", " << R->getptrToMission()->getID() << "/" << R->GetID();
+            }
         }
-        temp->dequeue(current);
+        if(sizePR!=0)
+            cout << ")";
     }
-    PolarMissions += ')';
-    Emeregency += ']';
-    cout << Emeregency << PolarMissions;
-
-    //Rover* R;
-    //int sizeRIE = RIE->getSize();
-    //int sizePR = 0;
-    //int sizeER = 0;
-    //if ((RIE->peek(R)) && (R->getStatus() == 'I'))
-    //{
-    //    PriorityQueue<Rover*>* temp = new PriorityQueue<Rover*>();
-    //    for (int i = 0; i < sizeRIE; i++)
-    //    {
-    //        RIE->dequeue(R);
-    //        if (R->getptrToMission()->getType() == 'E' && sizeER == 0)
-    //        {
-    //            cout << "[" << R->getptrToMission()->getID() << "/" << R->GetID();
-    //            sizeER++;
-    //            temp->enqueue(R, GetED(R->getptrToMission(), 'E'));
-    //        }
-    //        else if (R->getptrToMission()->getType() == 'E')
-    //        {
-    //            temp->enqueue(R, GetED(R->getptrToMission(), 'E'));
-    //            cout << ", " << R->getptrToMission()->getID() << "/" << R->GetID();
-    //            sizeER++;
-    //        }
-    //        else
-    //            temp->enqueue(R, GetED(R->getptrToMission(), 'P'));
-    //    }
-    //   if(sizeER!=0)
-    //       cout << "]   ";
-    //    for (int i = 0; i < sizeRIE; i++)
-    //    {
-    //        temp->dequeue(R);
-    //        if (R->getType() == 'E')
-    //            RIE->enqueue(R, GetED(R->getptrToMission(), 'E'));
-    //        else
-    //            RIE->enqueue(R, GetED(R->getptrToMission(), 'P'));
-    //    }
-
-    //    PriorityQueue<Rover*>* temp2 = new PriorityQueue<Rover*>();
-    //    for (int i = 0; i < sizeRIE; i++)
-    //    {
-    //        RIE->dequeue(R);
-    //        if (R->getptrToMission()->getType() == 'P' && sizePR == 0)
-    //        {
-    //            cout << "(" << (R->getptrToMission())->getID() << "/" << R->GetID();
-    //            temp2->enqueue(R, GetED(R->getptrToMission(), 'P'));
-    //            sizePR++;
-    //        }
-    //        else if (R->getptrToMission()->getType() == 'P')
-    //        {
-    //            temp2->enqueue(R, GetED(R->getptrToMission(), 'P'));
-    //            cout << ", " << R->getptrToMission()->getID() << "/" << R->GetID();
-    //        }
-    //        else
-    //            temp2->enqueue(R, GetED(R->getptrToMission(), 'E'));
-    //    }
-    //    if(sizePR!=0)
-    //        cout << ")";
-    //    for (int i = 0; i < sizeRIE; i++)
-    //    {
-    //        temp2->dequeue(R);
-    //        if (R->getType() == 'P')
-    //            RIE->enqueue(R, GetED(R->getptrToMission(), 'P'));
-    //        else
-    //            RIE->enqueue(R, GetED(R->getptrToMission(), 'E'));
-    //    }
-    //}
-    //else
-    //    return;
+    else
+        return;
 }
 
 void MarsStation::O_AvailableRovers()
@@ -685,7 +622,7 @@ void MarsStation::O_AvailableRovers()
                     cout << ", ";
                 }
         }
-        cout << "]   ";
+        cout << "] ";
         for (int i = 0; i < sizeER; i++)
         {
             temp->dequeue(R);
@@ -727,12 +664,12 @@ void MarsStation::O_InCheckupRovers()
     int sizePRCH = PRCH->getSize();
     if (ERCH->peek(R))
     {
-        cout << "[ ";
+        cout << "[";
         for (int i = 0; i < sizeERCH; i++)
         {
             ERCH->dequeue(R);
             ERCH->enqueue(R);
-            cout << R->GetID() << " ";
+            cout << R->GetID();
             if (i < sizeERCH - 1)
             {
                 cout << ", ";
@@ -742,12 +679,12 @@ void MarsStation::O_InCheckupRovers()
     }
     if (PRCH->peek(R))
     {
-        cout << "( ";
+        cout << "(";
         for (int i = 0; i < sizePRCH; i++)
         {
             PRCH->dequeue(R);
             PRCH->enqueue(R);
-            cout << R->GetID() << " ";
+            cout << R->GetID();
             if (i < sizePRCH - 1)
             {
                 cout << ", ";
@@ -761,25 +698,39 @@ void MarsStation::O_InCheckupRovers()
 void MarsStation::O_CompletedMissions()
 {
     PriorityQueue<Mission*>* temp = new PriorityQueue<Mission*>(*CM);
-    string PolarMissions = "(", Emeregency = "[";
+    string PolarMissions = "(", Emergency = "[";
     Mission* current;
+    int Psize = 0;
+    int Esize = 0;
     while (temp->peek(current))
     {
         if (current->getType() == 'E')
         {
-            Emeregency += ',';
-            Emeregency += to_string(current->getID());
+            if (Esize == 0)
+            {
+                Emergency;
+            }
+            else
+                Emergency += ',';
+            Emergency += to_string(current->getID());
+            Esize++;
         }
         else if (current->getType() == 'P')
         {
-            PolarMissions += ',';
+            if (Psize == 0)
+            {
+                PolarMissions;
+            }
+            else
+                PolarMissions += ',';
             PolarMissions += to_string(current->getID());
+            Psize++;
         }
         temp->dequeue(current);
     }
     PolarMissions += ')';
-    Emeregency += ']';
-    cout << Emeregency << PolarMissions;
+    Emergency += ']';
+    cout << Emergency << PolarMissions;
     /*Mission* M;
     int c=CM->getSize();
     int sizeCM = 0;
@@ -859,20 +810,6 @@ void MarsStation::checkEvents()
     }
 }
 
-//Law queue 3ady
-//awel element status W
-//3ayza 2a output el waiting el mawgood
-//dequeue awel element staus W print ID
-//enqueue it fel a5er
-//w hafdal a3mel dequeue w a2ra w ashoof law howa mesh I w ba3d keda enqueue
-
-//int GetWaitingNumber()
-//{
-//case 1
-//3adad dequeue, increment only law el status! I, enqueue asc, dequeue while(element status != W)
-//}
-//case 2
-//t
 
 //Mai
 void MarsStation::CheckCompleted()
@@ -925,7 +862,7 @@ bool MarsStation::isFailed(Mission* M, Rover* R)
 
     srand(time(NULL));
     int failure = rand() % 100 + 1;
-    if ((failure == 71) || (failure == 88) || (failure == 38) || (failure == 3) || (failure == 100) || (failure == 50))
+    if ((failure == 71) || (failure == 88) || (failure == 3) || (failure == 50))
     {
         NeedsCheckUp(R, 'F');
         M->setStatus('F');
@@ -944,13 +881,6 @@ bool MarsStation::isFailed(Mission* M, Rover* R)
         return false;
 }
 
-//int MarsStation::GetWD(PriorityQueue<Mission*>* m) //To get the Waiting Days
-//{
-
-//daytoleaveexecution (getter) - getED() -eventday
-//    the day the mission get assigned to a rover - the day the mission got formulated GetFD(e)
-//
-//}
 
 //Omar AbdelAzeem
 int MarsStation::GetED(Mission* M, char rovertype) //To get the Execution Days 
@@ -960,25 +890,20 @@ int MarsStation::GetED(Mission* M, char rovertype) //To get the Execution Days
     if ((M->getType() == 'E') && (rovertype=='E') && (ER->peek(r))) //if it was an Emergency mission with an emergency rover assigned to it
     {
         ER->peek(r);
-        Day = ceil(M->getDuration() + ((((M->getTargetLocation() / r->getSpeed())) / 25) * 2));    //(the days it takes to reach the target location, fulfill mission requirements, and then get back to the base station)
+        Day = ceil((float)(M->getDuration() + ((((float)(M->getTargetLocation() / (float)r->getSpeed())) / 25) * 2)));    //(the days it takes to reach the target location, fulfill mission requirements, and then get back to the base station)
     }
     else if ((M->getType() == 'E') && (rovertype == 'P') &&(PR->peek(r))) //if it was an Emergency mission with a polar rover assigned to it
     {
         PR->peek(r);
-        Day = ceil(M->getDuration() + (((M->getTargetLocation() / r->getSpeed()) /25) * 2));      //(the days it takes to reach the target location, fulfill mission requirements, and then get back to the base station)
+        Day = ceil((float)(M->getDuration() + ((((float)(M->getTargetLocation() / (float)r->getSpeed())) / 25) * 2)));      //(the days it takes to reach the target location, fulfill mission requirements, and then get back to the base station)
     }
     else if ((M->getType() == 'P') && (rovertype=='P') && (PR->peek(r))) //if it was a Polar mission it must have a polar rover
     {
         PR->peek(r);
-        Day = ceil(M->getDuration() + (((M->getTargetLocation() / r->getSpeed()) / 25) * 2));      //(the days it takes to reach the target location, fulfill mission requirements, and then get back to the base station)
+        Day = ceil((float)(M->getDuration() + ((((float)(M->getTargetLocation() / (float)r->getSpeed())) / 25) * 2)));      //(the days it takes to reach the target location, fulfill mission requirements, and then get back to the base station)
     }
     return Day;
 }
 
-////Omar AbdelAzeem
-//int MarsStation::GetCD(Mission* M, char rovertype) //To get the Completion Day
-//{
-//    int CD = /*GetWD(m)*/ + GetED(M, rovertype) + M->getDay(); //CD = FD + WD + ED
-//    return CD;
-//}
+
 
