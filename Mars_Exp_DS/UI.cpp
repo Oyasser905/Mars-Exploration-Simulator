@@ -143,6 +143,11 @@ int UI::getNum_of_events()
     return no_events;
 }
 
+int UI::Mode()
+{
+    return mode;
+}
+
 void UI::Interactive_mode()
 {
     char x;
@@ -179,13 +184,12 @@ void UI::SbS_mode()
 
 void UI::Silent_mode()
 {
-    system("CLS");
     cout << "Silent Mode\nSimulation Starts...\nSimulation Ends, Output file created\n\n\n";
 }
 
 void UI::w_file()
 {
-    system("CLS");
+    //system("CLS");
     string o_file;
     cout << "(Please include file extension)\nEnter output file name: ";
     cin >> o_file;
@@ -242,7 +246,7 @@ void UI::p_output()
     }
     else if (mode == 3)
     {
-        Silent_mode();
+        return;
     }
 }
 

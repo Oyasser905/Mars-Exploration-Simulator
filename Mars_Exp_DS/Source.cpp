@@ -35,5 +35,23 @@ int main()
 
     }
     mars.initialize2();
-    mars.UI_w();
+    if (mars.getMode() == 1)
+    {
+        Sleep(2000);
+        system("CLS");
+        mars.UI_w();
+    }
+    else if (mars.getMode() == 2)
+    {
+        Sleep(2000);
+        system("CLS");
+        mars.UI_w();
+    }
+    else if (mars.getMode() == 3)
+    {
+        system("CLS");
+        mars.p_SilentMode();
+        mars.UI_w();
+    }
+    
 }

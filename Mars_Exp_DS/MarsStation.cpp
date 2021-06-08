@@ -239,6 +239,16 @@ void MarsStation::initialize2() //function that would be called in UI to cout th
     SetNumberPMissions(k);
 }
 
+int MarsStation::getMode()
+{
+    return uiobj->Mode();
+}
+
+void MarsStation::p_SilentMode()
+{
+    uiobj->Silent_mode();
+}
+
 bool MarsStation::NeedsCheckUp(Rover* R, char s) //checks if the rover needs checkup, if yes sends it to checkup and changes variable "no_missions_completed" to zero
 {
 

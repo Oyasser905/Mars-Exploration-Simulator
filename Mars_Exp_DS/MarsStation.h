@@ -100,5 +100,6 @@ public:
 	void O_InCheckupRovers();
 	void O_CompletedMissions();
 	void checkEvents(); //distributes the events
-	
+	int getMode();
+	void p_SilentMode();
 };

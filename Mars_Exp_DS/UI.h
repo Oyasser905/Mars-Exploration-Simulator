@@ -39,4 +39,5 @@ public:
 	void p_output();
 	void chooseMode();
 	int getNum_of_events();
+	int Mode();
 };
