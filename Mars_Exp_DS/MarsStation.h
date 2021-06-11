@@ -8,6 +8,7 @@ private:
 	int CurrentDay;
 	int NumberEMissions;
 	int NumberPMissions;
+	int NumberFMissions = 0;
 	int NumberPRovers;
 	int NumberERovers;
 	int eventsWaiting;
@@ -74,6 +75,7 @@ public:
 	int GetWaitingTotal();
 	int GetNumberEMissions();
 	int GetNumberPMissions();
+	int GetNumberFMissions();
 	int GetNumberPRovers();
 	int GetNumberERovers();
 	int GetExecutionDays(); //Total

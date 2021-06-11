@@ -371,6 +371,11 @@ int MarsStation::GetNumberPMissions()
     return NumberPMissions;
 }
 
+int MarsStation::GetNumberFMissions()
+{
+    return NumberFMissions;
+}
+
 int MarsStation::GetNumberPRovers()
 {
     return NumberPRovers;
@@ -793,6 +798,7 @@ bool MarsStation::isFailed(Mission* M, Rover* R)
         {
             EM->enqueue(M, M->calcWeight());
         }
+        NumberFMissions++;
         return true;
     }
     else

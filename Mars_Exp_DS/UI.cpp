@@ -221,6 +221,7 @@ void UI::w_file()
         myfile << endl;
         myfile << "...................................................................................................." << endl;
         myfile << "Missions " << (obj->GetNumberEMissions()) + (obj->GetNumberPMissions()) << " [P :" << obj->GetNumberPMissions() << ", E:" << obj->GetNumberEMissions() << "]" << endl;
+        myfile << "Number of Failed Missions: " << obj->GetNumberFMissions() << endl;
         myfile<<"Rovers " << (obj->GetNumberERovers()) + (obj->GetNumberPRovers()) << " [P :" << obj->GetNumberPRovers() << ", E:" << obj->GetNumberERovers() << "]" << endl;
         float b=0;
         if (obj->GetEventsWaiting() == 0)
