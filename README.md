@@ -6,4 +6,4 @@
 ## Project description manual (.pdf):
 https://drive.google.com/file/d/1M5VaK8Ofd18Y0-mG959N6EZ6kp92d_Go/view?usp=sharing
 ## Sample run videos (.mp4):
-https://drive.google.com/file/d/1M5VaK8Ofd18Y0-mG959N6EZ6kp92d_Go/view?usp=sharing
+https://drive.google.com/drive/folders/1VwlJ37R7s_7hBD2traZND_-PdR9q6KFP?usp=sharing
